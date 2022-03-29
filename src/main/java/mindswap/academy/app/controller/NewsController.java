@@ -25,8 +25,5 @@ public class NewsController {
 
         return ResponseEntity.ok().body("News Posted");
     }
-
-
-
 }
 
