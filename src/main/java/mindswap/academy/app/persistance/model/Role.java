@@ -20,7 +20,7 @@ public class Role {
     @Column(name = "role_name")
     private String name;
     @Column(name = "users_id")
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.LAZY)
     private List<User> users;
 
     public Role(String name) {

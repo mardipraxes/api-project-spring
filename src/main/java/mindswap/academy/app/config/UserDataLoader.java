@@ -4,6 +4,7 @@ import mindswap.academy.app.persistance.model.*;
 import mindswap.academy.app.persistance.repository.*;
 import mindswap.academy.app.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Transient;
@@ -25,6 +26,8 @@ public class UserDataLoader {
     private NewsRepo newsRepo;
     @Autowired
     private RatingRepo ratingRepo;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     @Autowired
     private CategoryRepo categoryRepo;
 
@@ -62,7 +65,7 @@ public class UserDataLoader {
            User user = User.builder()
                     .username(names[i].toLowerCase() + ((int) (Math.random() * 100)))
                     .email(names[i].concat(String.valueOf((int) (Math.random() * 40) + 1960)).toLowerCase() + "@gmail.com")
-                    .password("123456")
+                    .password(passwordEncoder.encode("123456"))
                     .country("USA").build();
 
            user.setRoles(new HashSet<>());
@@ -77,7 +80,7 @@ public class UserDataLoader {
             journalist.setPassword("123456");
             journalist.setCountry("USA");
             journalist.setNewsPosts(new HashSet<>());
-            journalist.getNewsPosts().add(newsRepo.findByTitle("Russia killed levensky"));
+            journalist.getNewsPosts().add(newsRepo.findByTitle("Russia killed levensky").get());
             journalist.setRoles(new HashSet<>());
             journalist.getRoles().add(roleRepo.findByName(roleJournalist.getName()));
             userRepo.save(journalist);
@@ -121,7 +124,7 @@ public class UserDataLoader {
 
     @Transient
     private void createNewsIfNotFound(NewsPost newsPost) {
-        NewsPost newsPost1 = newsRepo.findByTitle(newsPost.getTitle());
+        NewsPost newsPost1 = newsRepo.findByTitle(newsPost.getTitle()).get();
         if (newsPost1 == null) {
             newsRepo.save(newsPost);
         }

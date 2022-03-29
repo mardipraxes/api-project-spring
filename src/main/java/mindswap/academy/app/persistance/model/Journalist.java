@@ -10,7 +10,6 @@ import java.util.Collection;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@Inheritance(strategy= InheritanceType.TABLE_PER_CLASS)
 public class Journalist extends User {
 
     @Column

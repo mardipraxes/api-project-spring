@@ -38,7 +38,7 @@ public class NewsPost {
     private Date publishedDate;
 
 
-    @OneToOne(mappedBy = "news", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "news", cascade = CascadeType.ALL)
     private Rating rating;
 
     @Column
