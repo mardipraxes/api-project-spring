@@ -1,16 +1,17 @@
 package mindswap.academy.app.config;
 
 import mindswap.academy.app.persistance.model.*;
-import mindswap.academy.app.persistance.repository.NewsRepo;
-import mindswap.academy.app.persistance.repository.RoleRepo;
-import mindswap.academy.app.persistance.repository.UserRepo;
+import mindswap.academy.app.persistance.repository.*;
 import mindswap.academy.app.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Transient;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
@@ -22,6 +23,10 @@ public class UserDataLoader {
     private RoleRepo roleRepo;
     @Autowired
     private NewsRepo newsRepo;
+    @Autowired
+    private RatingRepo ratingRepo;
+    @Autowired
+    private CategoryRepo categoryRepo;
 
 
     public void loadData() {
@@ -31,24 +36,27 @@ public class UserDataLoader {
         Role roleJournalist = new Role("ROLE_Journalist");
         Role roleUser = new Role("ROLE_User");
 
+        Category category = Category.builder()
+                .newsPost(null)
+                .description("Russia")
+                .name("Russia")
+                .build();
+
+        createCategoryIfNotFound(category);
+
         Rating rating = Rating.builder()
                 .truthfulness(1)
                 .biasedRating(1)
                 .writingQuality(1)
                 .build();
 
-        NewsPost newsPost = NewsPost.builder()
-                .rating(null)
-                .categories(null)
-                .content("Russia killed levensky")
-                .title("Russia killed levensky")
-                .build();
+        createRatingIfNotFound(rating);
 
 
         createRoleIfNotFound(roleAdmin);
         createRoleIfNotFound(roleJournalist);
         createRoleIfNotFound(roleUser);
-        createNewsIfNotFound(newsPost);
+
 
         IntStream.range(0, 15).forEach(i -> {
            User user = User.builder()
@@ -69,11 +77,47 @@ public class UserDataLoader {
             journalist.setPassword("123456");
             journalist.setCountry("USA");
             journalist.setNewsPosts(new HashSet<>());
+            journalist.getNewsPosts().add(newsRepo.findByTitle("Russia killed levensky"));
             journalist.setRoles(new HashSet<>());
             journalist.getRoles().add(roleRepo.findByName(roleJournalist.getName()));
             userRepo.save(journalist);
         });
+
+        List<Journalist> journalists = new ArrayList<>();
+        for(User user : userRepo.findAll()) {
+            if(user instanceof Journalist) {
+                journalists.add((Journalist) user);
+            }
+        }
+
+        NewsPost newsPost = NewsPost.builder()
+                .journalist(journalists.get(0))
+                .rating(ratingRepo.findAll().get(0))
+                .categories(new HashSet<>(categoryRepo.findAll()))
+                .content("Russia killed levensky")
+                .title("Russia killed levensky")
+                .build();
+        createNewsIfNotFound(newsPost);
+        Rating rating1 = ratingRepo.findById(1L).get();
+        rating1.setNews(newsRepo.findById(1L).get());
+        ratingRepo.save(rating1);
     }
+
+    private void createCategoryIfNotFound(Category category) {
+        Category category1 = categoryRepo.findByName(category.getName());
+        if (category1 == null) {
+            categoryRepo.save(category);
+        }
+    }
+
+    private void createRatingIfNotFound(Rating rating) {
+        Rating rating1 = ratingRepo.findByTruthfulness(rating.getTruthfulness());
+        if (rating1 == null) {
+            ratingRepo.save(rating);
+        }
+    }
+
+
 
     @Transient
     private void createNewsIfNotFound(NewsPost newsPost) {

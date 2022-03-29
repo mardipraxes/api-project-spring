@@ -37,9 +37,9 @@ public class NewsPost {
     @Column
     private Date publishedDate;
 
-    @Column
-    @OneToMany(fetch = FetchType.LAZY)
-    private Collection<Rating> rating;
+
+    @OneToOne(mappedBy = "news", cascade = CascadeType.MERGE)
+    private Rating rating;
 
     @Column
     private String imageURL;

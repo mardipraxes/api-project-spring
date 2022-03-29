@@ -7,4 +7,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RatingRepo extends JpaRepository<Rating, Long> {
 
+    Rating findByTruthfulness(Integer truthfulness);
+
+    Rating findByNewsId(Long i);
 }

@@ -17,6 +17,9 @@ public class Rating {
     @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "increment")
     private Long id;
 
+    @Column(columnDefinition = "int(255) default 0")
+    private Integer counter;
+
     @Column(name = "truthfulness")
     private Integer truthfulness;
 
@@ -26,8 +29,8 @@ public class Rating {
     @Column(name = "biased_rating")
     private Integer biasedRating;
 
-    @JoinColumn(name = "news_id")
-    @ManyToOne
+
+    @OneToOne
     private NewsPost news;
 
 }
