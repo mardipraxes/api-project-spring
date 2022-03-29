@@ -28,16 +28,18 @@ public class NewsPost {
     @ManyToOne(fetch = FetchType.LAZY)
     private Journalist journalist;
 
-    @JoinColumn
-    @ManyToMany(fetch = FetchType.LAZY)
-    private Collection<Category> category;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @JoinTable(name = "news_categories", joinColumns =
+    @JoinColumn(name = "news_id"), inverseJoinColumns =
+    @JoinColumn(name = "category_id"))
+    private Collection<Category> categories;
 
     @Column
     private Date publishedDate;
 
     @Column
     @OneToMany(fetch = FetchType.LAZY)
-    private Rating rating;
+    private Collection<Rating> rating;
 
     @Column
     private String imageURL;

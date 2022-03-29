@@ -1,8 +1,7 @@
 package mindswap.academy.app.config;
 
-import mindswap.academy.app.persistance.model.Journalist;
-import mindswap.academy.app.persistance.model.Role;
-import mindswap.academy.app.persistance.model.User;
+import mindswap.academy.app.persistance.model.*;
+import mindswap.academy.app.persistance.repository.NewsRepo;
 import mindswap.academy.app.persistance.repository.RoleRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
 import mindswap.academy.app.utils.StringUtil;
@@ -10,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Transient;
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.stream.IntStream;
 
@@ -20,6 +20,8 @@ public class UserDataLoader {
     private UserRepo userRepo;
     @Autowired
     private RoleRepo roleRepo;
+    @Autowired
+    private NewsRepo newsRepo;
 
 
     public void loadData() {
@@ -29,9 +31,24 @@ public class UserDataLoader {
         Role roleJournalist = new Role("ROLE_Journalist");
         Role roleUser = new Role("ROLE_User");
 
+        Rating rating = Rating.builder()
+                .truthfulness(1)
+                .biasedRating(1)
+                .writingQuality(1)
+                .build();
+
+        NewsPost newsPost = NewsPost.builder()
+                .rating(null)
+                .categories(null)
+                .content("Russia killed levensky")
+                .title("Russia killed levensky")
+                .build();
+
+
         createRoleIfNotFound(roleAdmin);
         createRoleIfNotFound(roleJournalist);
         createRoleIfNotFound(roleUser);
+        createNewsIfNotFound(newsPost);
 
         IntStream.range(0, 15).forEach(i -> {
            User user = User.builder()
@@ -57,6 +74,15 @@ public class UserDataLoader {
             userRepo.save(journalist);
         });
     }
+
+    @Transient
+    private void createNewsIfNotFound(NewsPost newsPost) {
+        NewsPost newsPost1 = newsRepo.findByTitle(newsPost.getTitle());
+        if (newsPost1 == null) {
+            newsRepo.save(newsPost);
+        }
+    }
+
     @Transient
     private void createRoleIfNotFound(Role roleAdmin) {
         if (roleRepo.findByName(roleAdmin.getName()) == null) {

@@ -1,11 +1,10 @@
 package mindswap.academy.app.persistance.repository;
 
-import mindswap.academy.app.persistance.model.NewsPost;
+import mindswap.academy.app.persistance.model.Rating;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface NewsRepo extends JpaRepository<NewsPost, Long> {
+public interface RatingRepo extends JpaRepository<Rating, Long> {
 
-    NewsPost findByTitle(String title);
 }
