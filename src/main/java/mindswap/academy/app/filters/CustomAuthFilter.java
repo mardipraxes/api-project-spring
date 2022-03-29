@@ -3,6 +3,7 @@ package mindswap.academy.app.filters;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.utils.AlgorithmUtil;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -35,7 +36,7 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        log.info(String.format("Username: %s, Password: %S", username, password));
+        log.info(String.format("Username: %s, Password: %s", username, password));
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username,password);
         return authenticationManager.authenticate(authenticationToken);
@@ -49,7 +50,7 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
             throws IOException, ServletException {
 
         User user = (User) authentication.getPrincipal();
-        Algorithm algorithm = Algorithm.HMAC256("secret".getBytes());
+        Algorithm algorithm = AlgorithmUtil.getAlgorithm();
         String accessToken = JWT.create().withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
