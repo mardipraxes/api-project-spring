@@ -1,33 +1,49 @@
 package mindswap.academy.app.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.service.FindNewsLookupServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 public class FindNewsController {
 
     @Autowired
     private FindNewsLookupServiceImpl findNewsLookupServiceImpl;
 
+    @GetMapping("/findNews/")
+    public NewsPost getFindNewsByParameters(
+            @RequestParam(value = "languages", defaultValue = "en") String languages,
+            @RequestParam(value = "sources", defaultValue = "cnn") String sources,
+            @RequestParam(value = "categories", defaultValue = "sports") String categories,
+            @RequestParam(value = "keywords", defaultValue = "war") String keywords,
+            @RequestParam(value = "countries", defaultValue = "us") String countries
+    )
+
+            throws ExecutionException, InterruptedException {
+        log.info("Query for news api made with following parameters: {},{},{},{},{}",languages, sources, categories, keywords, countries);
+        CompletableFuture<NewsPost> newsPost = findNewsLookupServiceImpl.findNews(languages, sources, categories, keywords, countries);
+        NewsPost newsPostApi = newsPost.get();
+        return newsPostApi;
+        // return  gitHubLookupService.findUser(githubId);
+    }
+
     @GetMapping("/findNews/{findNewsById}")
-    public NewsPost getFindNewsById(@PathVariable String findNewsById) throws ExecutionException, InterruptedException {
-        System.out.println("before Github Id: " + findNewsById);
-        CompletableFuture<NewsPost> newsPost = findNewsLookupServiceImpl.findNews(findNewsById);
-        System.out.println("after Github Id: " + findNewsById);
-        NewsPost userGit = newsPost.get();
-        System.out.println("end Github Id: " + findNewsById);
-        return userGit;
+    public NewsPost getFindNewsByBody(@PathVariable String findNewsById) throws ExecutionException, InterruptedException {
+        System.out.println("before newspostapi Id: " + findNewsById);
+        CompletableFuture<NewsPost> newsPost = findNewsLookupServiceImpl.findNews();
+        System.out.println("after newspostapi Id: " + findNewsById);
+        NewsPost newsPostApi = newsPost.get();
+        System.out.println("end newspost Id: " + findNewsById);
+        return newsPostApi;
         // return  gitHubLookupService.findUser(githubId);
     }
 
