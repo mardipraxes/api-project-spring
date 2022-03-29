@@ -33,12 +33,15 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        if(request.getServletPath().equals("/login")) {
+        if(request.getServletPath().equals("/api/login")) {
             filterChain.doFilter(request, response);
             return;
         }
 
         String authorizationHeader = request.getHeader(AUTHORIZATION);
+
+        log.info("Authorization header: {}", authorizationHeader);
+
         if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             try {
                 String token = authorizationHeader.substring("Bearer ".length());

@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class AlgorithmUtil {
 
-    @Value("${algorithm.secret-code}")
-    private static String secretCode;
+
+    private static final String secretCode = "christyronie420blazeit";
 
 
 

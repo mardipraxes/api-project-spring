@@ -50,7 +50,7 @@ public class NewsConverter {
         Arrays.stream(newsPostDto.getCategories())
                 .forEach(category -> newsPost.getCategories().add(categoryRepo.findByName(category)));
 
-        newsPost.setJournalist(userRepo.findByUsername(newsPostDto.getAuthor()));
+        newsPost.setJournalist((Journalist) userRepo.findByUsername(newsPostDto.getAuthor()));
 
         Rating rating = Rating.builder()
                 .biasedRating(0)

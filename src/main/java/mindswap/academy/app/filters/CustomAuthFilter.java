@@ -37,6 +37,7 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
         String password = request.getParameter("password");
 
         log.info(String.format("Username: %s, Password: %s", username, password));
+
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(username,password);
         return authenticationManager.authenticate(authenticationToken);
@@ -51,7 +52,8 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
 
         User user = (User) authentication.getPrincipal();
         Algorithm algorithm = AlgorithmUtil.getAlgorithm();
-        String accessToken = JWT.create().withSubject(user.getUsername())
+        String accessToken = JWT.create()
+                .withSubject(user.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .withClaim("roles",
