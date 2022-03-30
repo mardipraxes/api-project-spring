@@ -1,5 +1,6 @@
 package mindswap.academy.app.controller;
 
+import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.service.UserServiceImpl;
@@ -7,11 +8,10 @@ import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.view.RedirectView;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,6 +36,15 @@ public class UserController {
         UserDto user = userServiceImpl.getUserById(id);
 
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/register")
+    private ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationDto registrationDto) {
+        if(!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
+            return ResponseEntity.badRequest().body("Passwords do not match");
+        }
+
+        return ResponseEntity.ok(new RedirectView("/login"));
     }
 
 

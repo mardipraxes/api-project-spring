@@ -1,15 +1,15 @@
 package mindswap.academy.app.service;
 
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.converters.UserConverter;
 import mindswap.academy.app.exceptions.InvalidRequestException;
+import mindswap.academy.app.exceptions.UserAlreadyExistsException;
 import mindswap.academy.app.exceptions.UserNotFoundException;
-import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,5 +67,16 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userRepo.findById(id)
                 .map(userConverter::toDto)
                 .orElseThrow(() -> new UserNotFoundException(id.toString()));
+    }
+
+    public void registerUser(RegistrationDto registrationDto) {
+
+        if(userRepo.findByUsername(registrationDto.getUsername()) != null) {
+            log.warn("User {} already exists", registrationDto.getUsername());
+            throw new UserAlreadyExistsException(registrationDto.getUsername());
+        }
+
+        userRepo.save(userConverter.toEntityFromRegistrationDto(registrationDto));
+
     }
 }

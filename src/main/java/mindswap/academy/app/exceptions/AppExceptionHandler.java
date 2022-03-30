@@ -43,8 +43,14 @@ public class AppExceptionHandler {
     public ResponseEntity<ErrorMessage> dealWithNewsNotFound(Exception e, HttpServletRequest request) {
 
         ErrorMessage error = buildError(e, request, HttpStatus.NOT_FOUND.toString());
-        
+
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = UserAlreadyExistsException.class)
+    public ResponseEntity<ErrorMessage> dealWithUserAlreadyExists(Exception e, HttpServletRequest request) {
+        ErrorMessage error = buildError(e, request, HttpStatus.CONFLICT.toString());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
     private ErrorMessage buildError(Exception e, HttpServletRequest request, String statusCode) {
