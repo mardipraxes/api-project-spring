@@ -1,6 +1,7 @@
 package mindswap.academy.app.controller;
 
 import mindswap.academy.app.commands.NewsPostDto;
+import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.service.NewsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,13 +28,21 @@ public class NewsController {
 
     @GetMapping("/search")
     private ResponseEntity<?> getNews(@RequestParam(value = "categories",defaultValue = "[]") String[] categories,
-                                      @RequestParam(value = "author",defaultValue = "[]") String[] author)
-    {
+                                      @RequestParam(value = "author",defaultValue = "[]") String[] author) {
 
-        List<NewsPostDto> foundNews = newsService.findNews(categories,author);
+        List<NewsPostDto> foundNews = newsService.findNews(categories, author);
 
-        return ResponseEntity.ok().body(newsService.findNews(categories,author));
+        return ResponseEntity.ok().body(newsService.findNews(categories, author));
 
-}
+    }
+
+    @PostMapping("/rate/{title}")
+    private ResponseEntity<?> rateNews(@PathVariable("title") String title,
+                                       @RequestBody RatingDto ratingDto) {
+
+        newsService.rateNews(title,ratingDto);
+
+        return ResponseEntity.ok().body("News Rated");
+    }
 }
 

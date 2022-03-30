@@ -11,9 +11,11 @@ import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -29,6 +31,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     @Autowired
     private UserConverter userConverter;
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -61,6 +64,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public UserDto getUserById(Long id) {
 
         if(id < 1) {
+            log.warn("Invalid user id {}", id);
             throw new InvalidRequestException(id.toString());
         }
 
@@ -69,14 +73,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new UserNotFoundException(id.toString()));
     }
 
-    public void registerUser(RegistrationDto registrationDto) {
 
-        if(userRepo.findByUsername(registrationDto.getUsername()) != null) {
-            log.warn("User {} already exists", registrationDto.getUsername());
-            throw new UserAlreadyExistsException(registrationDto.getUsername());
-        }
 
-        userRepo.save(userConverter.toEntityFromRegistrationDto(registrationDto));
-
+    public UserDto getCurrentUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("User {} is trying to get his profile", username);
+        return userConverter.toDto(userRepo.findByUsername(username));
     }
 }

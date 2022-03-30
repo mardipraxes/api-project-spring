@@ -25,7 +25,11 @@ public class RegistrationDto {
     @NotBlank
     @Size(min = 6, max = 20)
     private String confirmPassword;
+
     private String journalistToken;
+
+    private String adminToken;
+
     private String country;
 
 

@@ -33,7 +33,11 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        if(request.getServletPath().equals("/api/login")) {
+        if(request.getServletPath().equals("/api/login")
+                || request.getServletPath().equals("/api/register")
+                || request.getServletPath().equals("/swagger-ui/index.html")
+                || request.getServletPath().equals("/v3/api-docs/")
+                || request.getServletPath().equals("/swagger-ui.html")){
             filterChain.doFilter(request, response);
             return;
         }
@@ -42,7 +46,15 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
         log.info("Authorization header: {}", authorizationHeader);
 
-        if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+        if(authorizationHeader == null ){
+            response.setStatus(FORBIDDEN.value());
+            response.setContentType(APPLICATION_JSON.toString());
+            response.getWriter().write("{\"message\": \"No token provided\"}");
+            return;
+        }
+
+        if(authorizationHeader.startsWith("Bearer ")) {
+
             try {
                 String token = authorizationHeader.substring("Bearer ".length());
                 JWTVerifier verifier = JWT.require(AlgorithmUtil.getAlgorithm()).build();
