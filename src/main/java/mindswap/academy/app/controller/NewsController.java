@@ -30,7 +30,7 @@ public class NewsController {
                                       @RequestParam(value = "author",defaultValue = "[]") String[] author)
     {
 
-        List<NewsPost> foundNews = newsService.findNews(categories,author);
+        List<NewsPostDto> foundNews = newsService.findNews(categories,author);
 
         return ResponseEntity.ok().body(newsService.findNews(categories,author));
 

@@ -63,4 +63,18 @@ public class NewsConverter {
 
         return newsPost;
     }
+
+    public NewsPostDto toDto(NewsPost newsPost) {
+
+        NewsPostDto newsPostDto = NewsPostDto
+                .builder()
+                .title(newsPost.getTitle())
+                .content(newsPost.getContent())
+                .imageURL(newsPost.getImageURL())
+                .build();
+
+        newsPostDto.setCategories(newsPost.getCategories().stream().map(Category::getName).toArray(String[]::new));
+
+        return newsPostDto;
+    }
 }

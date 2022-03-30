@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -32,7 +33,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsPost> findNews(String[] categories, String[] author) {
+    public List<NewsPostDto> findNews(String[] categories, String[] author) {
 
         List<NewsPost> newsPosts = new ArrayList<>();
         if(!verifyValidQuery(categories, author)) {
@@ -54,11 +55,16 @@ public class NewsServiceImpl implements NewsService {
                 throw new InvalidQueryException();
             }
 
-            sorted(newsPostsFilteredByAuthor).stream().map(newsPost -> newsConverter.toDto(newsPost));
-
-            return sorted(newsPostsFilteredByAuthor);
+            return sorted(newsPostsFilteredByAuthor)
+                    .stream()
+                    .map(newsPost -> newsConverter.toDto(newsPost))
+                    .collect(Collectors.toList());
         }
-        return sorted(newsPosts) newsPosts;
+
+        return sorted(newsPosts)
+                .stream()
+                .map(newsPost -> newsConverter.toDto(newsPost))
+                .collect(Collectors.toList());
     }
 
     private List<NewsPost> sorted(List<NewsPost> newsPosts) {
