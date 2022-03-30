@@ -19,8 +19,8 @@ public class FindNewsController {
     @Autowired
     private FindNewsLookupServiceImpl findNewsLookupServiceImpl;
 
-    @GetMapping("/findNews/")
-    public NewsPost getFindNewsByParameters(
+    @GetMapping("/findnews/")
+    public ResponseEntity<NewsPostDto> getFindNewsByParameters(
             @RequestParam(value = "languages", defaultValue = "en") String languages,
             @RequestParam(value = "sources", defaultValue = "cnn") String sources,
             @RequestParam(value = "categories", defaultValue = "sports") String categories,
@@ -30,13 +30,18 @@ public class FindNewsController {
 
             throws ExecutionException, InterruptedException {
         log.info("Query for news api made with following parameters: {},{},{},{},{}",languages, sources, categories, keywords, countries);
-        CompletableFuture<NewsPost> newsPost = findNewsLookupServiceImpl.findNews(languages, sources, categories, keywords, countries);
-        NewsPost newsPostApi = newsPost.get();
-        return newsPostApi;
+        CompletableFuture<NewsPostDto> newsPost = findNewsLookupServiceImpl.findNews(languages, sources, categories, keywords, countries);
+        NewsPostDto newsPostDto = newsPost.get();
+        if(newsPostDto == null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        findNewsLookupServiceImpl.saveNews(newsPostDto);
+        return ResponseEntity.ok(newsPostDto);
         // return  gitHubLookupService.findUser(githubId);
     }
 
-    @GetMapping("/findNews/{findNewsById}")
+
+   /* @GetMapping("/findNews/{findNewsById}")
     public NewsPost getFindNewsByBody(@PathVariable String findNewsById) throws ExecutionException, InterruptedException {
         System.out.println("before newspostapi Id: " + findNewsById);
         CompletableFuture<NewsPost> newsPost = findNewsLookupServiceImpl.findNews();
@@ -45,7 +50,7 @@ public class FindNewsController {
         System.out.println("end newspost Id: " + findNewsById);
         return newsPostApi;
         // return  gitHubLookupService.findUser(githubId);
-    }
+    }*/
 
     }
 
