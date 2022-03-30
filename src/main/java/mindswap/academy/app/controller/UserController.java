@@ -6,6 +6,7 @@ import mindswap.academy.app.service.UserServiceImpl;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ public class UserController {
     @Autowired
     private UserServiceImpl userServiceImpl;
 
+//    @PreAuthorize("hasRole('Admin')")
     @GetMapping("/users")
     private ResponseEntity<List<UserDto>> getAllUsers() {
 

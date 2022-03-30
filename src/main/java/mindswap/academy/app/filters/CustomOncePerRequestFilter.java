@@ -50,12 +50,18 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                 String username = decodedJWT.getSubject();
                 String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
                 Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
+
                 stream(roles).forEach(role -> authorities.add(new SimpleGrantedAuthority(role)));
+
                 UsernamePasswordAuthenticationToken authenticationToken =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
+
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
                 filterChain.doFilter(request, response);
+
             } catch (Exception e) {
+
                 log.error("Error logging in. " + e.getMessage());
                 response.setHeader("error", e.getMessage());
                 response.setStatus(FORBIDDEN.value());
@@ -64,8 +70,6 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                 response.setContentType(APPLICATION_JSON.toString());
                 new ObjectMapper().writeValue(response.getOutputStream(), error);
 
-            } finally {
-                filterChain.doFilter(request, response);
             }
         }
     }

@@ -57,11 +57,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers("/api/login").permitAll();
-        http.authorizeRequests().antMatchers("/api/users/").hasRole("Admin");
+        http.authorizeRequests().antMatchers("/api/users").hasRole("Admin");
         http.userDetailsService(userServiceImpl);
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthFilter);
-        http.addFilterBefore(new CustomOncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new CustomOncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class)
+        ;
 
     }
 

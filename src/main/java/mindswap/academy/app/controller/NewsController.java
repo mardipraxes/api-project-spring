@@ -1,15 +1,14 @@
 package mindswap.academy.app.controller;
 
 import mindswap.academy.app.commands.NewsPostDto;
+import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.service.NewsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/news")
@@ -25,5 +24,16 @@ public class NewsController {
 
         return ResponseEntity.ok().body("News Posted");
     }
+
+    @GetMapping("/search")
+    private ResponseEntity<?> getNews(@RequestParam(value = "categories",defaultValue = "[]") String[] categories,
+                                      @RequestParam(value = "author",defaultValue = "[]") String[] author)
+    {
+
+        List<NewsPost> foundNews = newsService.findNews(categories,author);
+
+        return ResponseEntity.ok().body(newsService.findNews(categories,author));
+
+}
 }
 

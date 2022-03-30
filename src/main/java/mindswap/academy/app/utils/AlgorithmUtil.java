@@ -17,6 +17,4 @@ public class AlgorithmUtil {
     public static Algorithm getAlgorithm() {
         return Algorithm.HMAC256(secretCode.getBytes());
     }
-
-
 }

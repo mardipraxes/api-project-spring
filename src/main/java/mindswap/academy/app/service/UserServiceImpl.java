@@ -39,6 +39,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new UserNotFoundException(username);
         }
 
+
         log.info("User {} is trying to log in..", username);
 
         Collection<SimpleGrantedAuthority> authorities =

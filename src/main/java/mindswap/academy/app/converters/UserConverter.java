@@ -10,6 +10,8 @@ public class UserConverter {
 
     public UserDto toDto(User user) {
 
+
+
         return UserDto.builder()
                 .username(user.getUsername())
                 .country(user.getCountry())

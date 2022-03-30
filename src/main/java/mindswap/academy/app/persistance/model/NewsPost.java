@@ -30,8 +30,8 @@ public class NewsPost {
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinTable(name = "news_categories", joinColumns =
-    @JoinColumn(name = "news_id"), inverseJoinColumns =
-    @JoinColumn(name = "category_id"))
+    @JoinColumn(name = "news_id"),
+            inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Collection<Category> categories;
 
     @Column
