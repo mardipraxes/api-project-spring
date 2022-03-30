@@ -29,7 +29,8 @@ public class Rating {
     @Column(name = "biased_rating")
     private Integer biasedRating;
 
-
+    @OneToOne
+    private ExternalNews externalNews;
     @OneToOne
     private NewsPost news;
 

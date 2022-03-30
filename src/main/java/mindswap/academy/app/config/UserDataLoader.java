@@ -8,11 +8,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Transient;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
@@ -54,7 +52,15 @@ public class UserDataLoader {
                 .build();
 
         createRatingIfNotFound(rating);
+        NewsPost newsPost = NewsPost.builder()
+                .categories(new HashSet<>(categoryRepo.findAll()))
+                .content("Russia killed levensky")
+                .title("Russia killed levensky")
+                .build();
 
+
+
+        createNewsIfNotFound(newsPost);
 
         createRoleIfNotFound(roleAdmin);
         createRoleIfNotFound(roleJournalist);
@@ -93,17 +99,10 @@ public class UserDataLoader {
             }
         }
 
-        NewsPost newsPost = NewsPost.builder()
-                .journalist(journalists.get(0))
-                .rating(ratingRepo.findAll().get(0))
-                .categories(new HashSet<>(categoryRepo.findAll()))
-                .content("Russia killed levensky")
-                .title("Russia killed levensky")
-                .build();
-        createNewsIfNotFound(newsPost);
         Rating rating1 = ratingRepo.findById(1L).get();
         rating1.setNews(newsRepo.findById(1L).get());
         ratingRepo.save(rating1);
+
     }
 
     private void createCategoryIfNotFound(Category category) {
@@ -124,10 +123,9 @@ public class UserDataLoader {
 
     @Transient
     private void createNewsIfNotFound(NewsPost newsPost) {
-        NewsPost newsPost1 = newsRepo.findByTitle(newsPost.getTitle()).get();
-        if (newsPost1 == null) {
-            newsRepo.save(newsPost);
-        }
+//        NewsPost newsPost1 = newsRepo.findByTitle(newsPost.getTitle()).get();
+        newsRepo.save(newsPost);
+
     }
 
     @Transient

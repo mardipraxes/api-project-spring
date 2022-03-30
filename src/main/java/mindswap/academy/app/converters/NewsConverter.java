@@ -1,10 +1,8 @@
 package mindswap.academy.app.converters;
 
+import mindswap.academy.app.commands.NewsFindDto;
 import mindswap.academy.app.commands.NewsPostDto;
-import mindswap.academy.app.persistance.model.Category;
-import mindswap.academy.app.persistance.model.Journalist;
-import mindswap.academy.app.persistance.model.NewsPost;
-import mindswap.academy.app.persistance.model.Rating;
+import mindswap.academy.app.persistance.model.*;
 import mindswap.academy.app.persistance.repository.CategoryRepo;
 import mindswap.academy.app.persistance.repository.RatingRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
@@ -76,5 +74,41 @@ public class NewsConverter {
         newsPostDto.setCategories(newsPost.getCategories().stream().map(Category::getName).toArray(String[]::new));
 
         return newsPostDto;
+    }
+
+    public ExternalNews toExternalNewsEntity(NewsFindDto newsFindDto) {
+
+        ExternalNews externalNews = ExternalNews.builder()
+                .title(newsFindDto.getTitle())
+                .description(newsFindDto.getDescription())
+                .author(newsFindDto.getAuthor())
+                .country(newsFindDto.getCountry())
+                .language(newsFindDto.getLanguage())
+                .urlToImage(newsFindDto.getImage())
+                .publishedAt(newsFindDto.getPublishedAt())
+                .build();
+
+        Category category = categoryRepo.findByName(newsFindDto.getCategory());
+
+        if (category == null) {
+            category = Category.builder()
+                    .name(newsFindDto.getCategory())
+                    .description(newsFindDto.getCategory())
+                    .build();
+            categoryRepo.save(category);
+            externalNews.setCategory(category);
+        }
+
+        Rating rating = Rating.builder()
+                .biasedRating(0)
+                .writingQuality(0)
+                .truthfulness(0)
+                .counter(0)
+                .externalNews(externalNews)
+                .build();
+
+        externalNews.setRating(rating);
+
+        return externalNews;
     }
 }

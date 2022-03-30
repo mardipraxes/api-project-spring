@@ -1,9 +1,9 @@
 server:
-  port: ${SERVER_PORT:8080}
-jwt:
-  secret: 123456
-algorithm:
-  secret-code: christyronie420blazeit
+  port: ${SERVER_PORT:8081}
+#jwt:
+#  secret: 123456
+#algorithm:
+#  secret-code: christyronie420blazeit
 spring:
   output:
     ansi:
