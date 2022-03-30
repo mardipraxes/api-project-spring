@@ -9,9 +9,11 @@ import java.util.Date;
 @Setter
 @Builder
 public class ErrorMessage {
+
     private String message;
     private String verb;
     private String path;
     private Date timestamp;
     private String statusCode;
+
 }

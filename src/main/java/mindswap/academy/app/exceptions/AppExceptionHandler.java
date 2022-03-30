@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @ControllerAdvice
 public class AppExceptionHandler {
@@ -37,8 +39,13 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = NewsNotFoundException.class)
+    public ResponseEntity<ErrorMessage> dealWithNewsNotFound(Exception e, HttpServletRequest request) {
 
-
+        ErrorMessage error = buildError(e, request, HttpStatus.NOT_FOUND.toString());
+        
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
 
     private ErrorMessage buildError(Exception e, HttpServletRequest request, String statusCode) {
         return ErrorMessage.builder()

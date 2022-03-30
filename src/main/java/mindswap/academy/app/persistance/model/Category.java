@@ -23,6 +23,8 @@ public class Category {
 
     private String description;
 
+    @OneToMany(mappedBy = "category")
+    private Collection<ExternalNews> externalNews;
     @ManyToMany(mappedBy = "categories")
     private Collection<NewsPost> newsPost;
 

@@ -40,7 +40,7 @@ public class NewsServiceImpl implements NewsService {
             throw new InvalidQueryException();
         }
 
-        Arrays.stream(categories).forEach(category -> newsPosts.addAll(newsRepo.findByCategory(category)));
+        Arrays.stream(categories).forEach(category -> newsPosts.addAll(newsRepo.findByCategories(category)));
         List<NewsPost> newsPostsFilteredByAuthor = new ArrayList<>();
         if(author != null) {
             newsPosts.stream()
