@@ -9,5 +9,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepo extends JpaRepository<User, Long> {
 
 
-    Journalist findByUsername(String author);
+    User findByUsername(String author);
+
+    User findByUsernameAndPassword(String username, String password);
+
+
 }

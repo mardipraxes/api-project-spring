@@ -8,10 +8,10 @@
 		<version>2.6.5</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>academy.mindswap</groupId>
-	<artifactId>lms</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>lms</name>
+	<groupId>app</groupId>
+	<artifactId>news-api</artifactId>
+	<version>0.1</version>
+	<name>news-api-v01</name>
 	<description>LMS for Mindswap</description>
 	<properties>
 		<java.version>17</java.version>

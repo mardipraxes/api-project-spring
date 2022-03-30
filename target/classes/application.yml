@@ -3,7 +3,7 @@ server:
 jwt:
   secret: 123456
 algorithm:
-  secret-code: 123456789
+  secret-code: christyronie420blazeit
 spring:
   output:
     ansi:

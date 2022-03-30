@@ -50,8 +50,7 @@ public class NewsConverter {
         Arrays.stream(newsPostDto.getCategories())
                 .forEach(category -> newsPost.getCategories().add(categoryRepo.findByName(category)));
 
-        newsPost.setJournalist(userRepo.findByUsername(newsPostDto.getAuthor()));
-
+        newsPost.setJournalist((Journalist) userRepo.findByUsername(newsPostDto.getAuthor()));
         Rating rating = Rating.builder()
                 .biasedRating(0)
                 .writingQuality(0)
@@ -63,5 +62,19 @@ public class NewsConverter {
         newsPost.setRating(rating);
 
         return newsPost;
+    }
+
+    public NewsPostDto toDto(NewsPost newsPost) {
+
+        NewsPostDto newsPostDto = NewsPostDto
+                .builder()
+                .title(newsPost.getTitle())
+                .content(newsPost.getContent())
+                .imageURL(newsPost.getImageURL())
+                .build();
+
+        newsPostDto.setCategories(newsPost.getCategories().stream().map(Category::getName).toArray(String[]::new));
+
+        return newsPostDto;
     }
 }

@@ -31,6 +31,14 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(value = InvalidQueryException.class)
+    public ResponseEntity<ErrorMessage> dealWithInvalidQuery(Exception e, HttpServletRequest request) {
+        ErrorMessage error = buildError(e, request, HttpStatus.BAD_REQUEST.toString());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+
+
 
     private ErrorMessage buildError(Exception e, HttpServletRequest request, String statusCode) {
         return ErrorMessage.builder()
