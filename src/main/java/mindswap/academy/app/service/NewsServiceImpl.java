@@ -58,7 +58,7 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsPostDto> findNews(String[] categories, String[] author) {
 
         List<NewsPost> newsPosts = new ArrayList<>();
-        if (!verifyValidQuery(categories)) {
+        if (verifyValidQuery(categories)) {
             log.warn("Invalid query");
             throw new InvalidQueryException();
         }
@@ -97,7 +97,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private boolean verifyValidQuery(String[] categories) {
-        return categories == null;
+        return categories != null && categories.length > 0;
     }
 
     public void rateNews(String title, RatingDto ratingDto) {
@@ -108,7 +108,9 @@ public class NewsServiceImpl implements NewsService {
 
         NewsPost newsPost = newsRepo.findByTitle(title).orElseThrow(NewsNotFoundException::new);
 
-        if(Objects.equals(newsPost.getId(), ratingTrackerRepo.getById(userId).getNewsId())){
+
+        // Object.equals() to prevent null pointer exceptions
+        if(Objects.equals(newsPost.getId(), ratingTrackerRepo.getByUserId(userId).getNewsId())){
             log.warn("User already rated this news");
             throw new UserAlreadyRatedException(username, title);
         }
