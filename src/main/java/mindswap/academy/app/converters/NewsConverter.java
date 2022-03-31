@@ -26,6 +26,20 @@ public class NewsConverter {
     @Autowired
     private RatingRepo ratingRepo;
 
+    public NewsPostDto toDtoFromExternalNews(ExternalNews externalNews) {
+
+        NewsPostDto newsPostDto = NewsPostDto
+                .builder()
+                .title(externalNews.getTitle())
+                .content(externalNews.getDescription())
+                .imageURL(externalNews.getUrlToImage())
+                .build();
+
+        newsPostDto.setCategories(new String[]{externalNews.getCategory().getName()});
+
+        return newsPostDto;
+    }
+
     public NewsPost toEntity(NewsPostDto newsPostDto){
 
         NewsPost newsPost = NewsPost

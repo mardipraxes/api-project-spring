@@ -1,11 +1,13 @@
 package mindswap.academy.app.controller;
 
+import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.service.NewsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -43,6 +45,49 @@ public class NewsController {
         newsService.rateNews(title,ratingDto);
 
         return ResponseEntity.ok().body("News Rated");
+    }
+
+    /**
+     * This method unlike the search, it returns all the news posts including external news posts.
+     *
+     * @param categories - categories of the news posts
+     * @return a response entity with the list of news posts
+     */
+    @GetMapping("/find")
+    private ResponseEntity<?> getNews(@RequestParam(value = "categories", defaultValue = "[]") String[] categories) {
+
+        List<NewsPostDto> foundNews = newsService.findAllNewsByCategory(categories);
+
+        return ResponseEntity.ok().body(foundNews);
+
+    }
+
+    @GetMapping("/findmynews/")
+    private ResponseEntity<List<NewsPostDto>> getMyNews() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        List<NewsPostDto> newsPostDtoList = newsService.findMyNews(username);
+
+        return ResponseEntity.ok().body(newsPostDtoList);
+
+    }
+
+    @PatchMapping("/edit/")
+    private ResponseEntity<?> editNews(@RequestBody EditNewsDto editNewsDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        newsService.editNews(username, editNewsDto);
+
+        return ResponseEntity.ok().body("News Edited");
+    }
+
+    // Needs Admin Role
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity<?> deleteNews(@PathVariable("id") Long id) {
+
+        newsService.deleteNews(id);
+
+        return ResponseEntity.ok().body("News Deleted with id: " + id);
     }
 }
 

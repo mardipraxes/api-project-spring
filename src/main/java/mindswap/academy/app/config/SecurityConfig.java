@@ -43,6 +43,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return super.authenticationManagerBean();
     }
 
+    /**
+     * Current implementation of the security configuration.
+     * It allows for everyone to login and register.
+     * Only the admin can access all user data and find the external news from an external api.
+     * Only journalists can post and edit news. Only the admin can delete news.
+     * Journalists need a token to register as journalists
+     * Must be authenticated to access the rest of the application.
+     *
+     *
+     *
+     */
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         CustomAuthFilter customAuthFilter = new CustomAuthFilter(authenticationManagerBean());
@@ -51,8 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers("/api/login", "/api/register","/swagger-ui.html","/swagger-ui/index.html","/v3/api-docs/").permitAll();
-        http.authorizeRequests().antMatchers("/api/users","/api/findnews**").hasRole("Admin");
+        http.authorizeRequests().antMatchers(
+                "/api/login", "/api/register","/swagger-ui.html","/swagger-ui/index.html","/v3/api-docs/")
+                .permitAll();
+        http.authorizeRequests()
+                .antMatchers(
+                        "/api/users","/api/findnews**","/api/news/delete**")
+                .hasRole("Admin");
+        http.authorizeRequests().antMatchers("/api/news/post").hasRole("Journalist");
         http.userDetailsService(userServiceImpl);
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthFilter);

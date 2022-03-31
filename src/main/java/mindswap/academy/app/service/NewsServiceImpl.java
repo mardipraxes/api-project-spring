@@ -1,14 +1,18 @@
 package mindswap.academy.app.service;
 
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.converters.NewsConverter;
-import mindswap.academy.app.exceptions.InvalidQueryException;
-import mindswap.academy.app.exceptions.NewsNotFoundException;
-import mindswap.academy.app.exceptions.NewsPostAlreadyExistsException;
+import mindswap.academy.app.exceptions.*;
+import mindswap.academy.app.persistance.model.ExternalNews;
+import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.NewsPost;
+import mindswap.academy.app.persistance.model.User;
+import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
 import mindswap.academy.app.persistance.repository.NewsRepo;
+import mindswap.academy.app.persistance.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +30,13 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private NewsConverter newsConverter;
+
+    @Autowired
+    private ExternalNewsRepo externalNewsRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
 
 
     public void postNews(NewsPostDto newsPostDto) {
@@ -96,5 +107,93 @@ public class NewsServiceImpl implements NewsService {
         newsPost.getRating().setTruthfulness(newsPost.getRating().getTruthfulness() + ratingDto.getTruthfulness());
         log.info("Added rating to news post with title: {}", newsPost.getTitle());
         newsRepo.save(newsPost);
+    }
+
+    public List<NewsPostDto> findAllNewsByCategory(String[] categories) {
+        if(categories == null) {
+            log.warn("No categories provided");
+            throw new InvalidQueryException();
+        }
+
+        List<NewsPost> newsPosts = new ArrayList<>();
+        List<ExternalNews> externalNewsList = new ArrayList<>();
+        List<NewsPostDto> newsPostDtoList = new ArrayList<>();
+
+
+
+        Arrays.stream(categories).forEach(category ->
+                newsPosts.addAll(newsRepo.findByCategories(category)));
+
+        Arrays.stream(categories).forEach(category ->
+                externalNewsList.addAll(externalNewsRepo.findByCategory(category)));
+
+        newsPosts.stream().map(newsConverter::toDto).forEach(newsPostDtoList::add);
+        externalNewsList.stream().map(newsConverter::toDtoFromExternalNews).forEach(newsPostDtoList::add);
+
+        if(newsPostDtoList.size() == 0) {
+            log.warn("No news posts found");
+            throw new NewsNotFoundException();
+        }
+
+        return newsPostDtoList;
+
+    }
+
+    public List<NewsPostDto> findMyNews(String username) {
+        User user = userRepo.findByUsername(username);
+        if(user == null) {
+            log.warn("User with username: {} not found", username);
+            throw new UserNotFoundException(username);
+        }
+
+        if(!(user instanceof Journalist)) {
+            log.warn("User with username: {} is not a journalist", username);
+            throw new NotAJournalistException(username);
+        }
+
+        return newsRepo.findByJournalist(user).stream().map(newsConverter::toDto).toList();
+    }
+
+    public void editNews(String username, EditNewsDto editNewsDto) {
+        NewsPost newsPost = newsRepo.findByTitle(editNewsDto.getTitle()).orElseThrow(NewsNotFoundException::new);
+        if(!newsPost.getJournalist().getUsername().equals(username)) {
+            log.warn("User with username: {} is not the author of news post with title: {}", username, newsPost.getTitle());
+            throw new ParametersDontMatchException(username, newsPost.getTitle());
+        }
+
+        newsPost.setTitle(editNewsDto.getTitle());
+
+        if(!checkForValidEditBody(editNewsDto)) {
+            log.warn("Only changing news title...");
+        }
+
+        if(checkForEmptyEditBody(editNewsDto)) {
+            log.warn("User sent empty parameters, nothing to edit...");
+
+        } else {
+            // These ternary statements are to prevent null pointer exceptions
+
+            newsPost.setContent(editNewsDto.getContent() == null ? newsPost.getContent() : editNewsDto.getContent());
+
+            newsPost.setImageURL(editNewsDto.getImageURL() == null ? newsPost.getImageURL() : editNewsDto.getImageURL());
+        }
+
+        newsRepo.save(newsPost);
+
+        log.info("Edited news post with title: {}", newsPost.getTitle());
+    }
+
+    private boolean checkForEmptyEditBody(EditNewsDto editNewsDto) {
+        return editNewsDto.getContent().equals("") || editNewsDto.getImageURL().equals("");
+    }
+
+    private boolean checkForValidEditBody(EditNewsDto editNewsDto) {
+        return editNewsDto.getContent() == null && editNewsDto.getImageURL() == null;
+    }
+
+    public void deleteNews(Long id) {
+        NewsPost newsPost = newsRepo.findById(id).orElseThrow(NewsNotFoundException::new);
+        newsRepo.delete(newsPost);
+        log.info("Deleted news post with id: {}", id);
     }
 }
