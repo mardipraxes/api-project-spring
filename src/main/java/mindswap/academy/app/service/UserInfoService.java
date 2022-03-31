@@ -34,6 +34,7 @@ public class UserInfoService implements UserService {
         }
 
 
+
         if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
             log.warn("Wrong password");
             throw new InvalidRequestException("Wrong password");
@@ -52,6 +53,17 @@ public class UserInfoService implements UserService {
             log.warn("User {} not found", username);
             throw new UserNotFoundException(username);
         }
+
+        if(user.getCountry().equals(countryDto.getNewCountry())){
+            log.warn("Same country... nothing to change");
+            throw new InvalidRequestException("Same country... nothing to change");
+        }
+
+        if(!passwordEncoder.matches(countryDto.getPassword(), user.getPassword())){
+            log.warn("Wrong password");
+            throw new InvalidRequestException("Wrong password");
+        }
+
         user.setCountry(countryDto.getNewCountry());
         userRepo.save(user);
     }
@@ -64,6 +76,17 @@ public class UserInfoService implements UserService {
             log.warn("User {} not found", username);
             throw new UserNotFoundException(username);
         }
+
+        if(!user.getEmail().equals(emailDto.getEmail())){
+            log.warn("Wrong email");
+            throw new InvalidRequestException("Wrong email");
+        }
+
+        if(!passwordEncoder.matches(emailDto.getPassword(), user.getPassword())){
+            log.warn("Wrong password");
+            throw new InvalidRequestException("Wrong password");
+        }
+
         user.setEmail(emailDto.getNewEmail());
         userRepo.save(user);
     }

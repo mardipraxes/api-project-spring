@@ -32,7 +32,6 @@ public class UserController {
     @Autowired
     private UserInfoService userInfoService;
 
-//    @PreAuthorize("hasRole('Admin')")
     @GetMapping("/users")
     private ResponseEntity<List<UserDto>> getAllUsers() {
 
@@ -81,7 +80,9 @@ public class UserController {
   private ResponseEntity<?> changeCountry(@RequestBody CountryDto countryDto) {
         userInfoService.changeCountry(countryDto);
         return ResponseEntity.ok("Successfully changed country");
+
    }
+
     @PatchMapping("/change-email")
     private ResponseEntity<?> changeCountry(@RequestBody EmailDto emailDto) {
         userInfoService.changeEmail(emailDto);
