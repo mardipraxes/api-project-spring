@@ -119,8 +119,6 @@ public class UserDataLoader {
         }
     }
 
-
-
     @Transient
     private void createNewsIfNotFound(NewsPost newsPost) {
 //        NewsPost newsPost1 = newsRepo.findByTitle(newsPost.getTitle()).get();

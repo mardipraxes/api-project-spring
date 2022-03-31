@@ -61,7 +61,6 @@ public class UserController {
 
         log.info("Registering user: {}", registrationDto.getUsername());
 
-
         authenticationService.registerUser(registrationDto);
 
         return ResponseEntity.ok("Successfully registered");

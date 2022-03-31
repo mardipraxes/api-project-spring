@@ -56,8 +56,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.userDetailsService(userServiceImpl);
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthFilter);
-        http.addFilterBefore(new CustomOncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class)
-        ;
+        http.addFilterBefore(new CustomOncePerRequestFilter(), UsernamePasswordAuthenticationFilter.class);
 
     }
 
