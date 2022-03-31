@@ -2,11 +2,11 @@ package mindswap.academy.app.converters;
 
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
+import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -38,11 +38,12 @@ public class UserConverter {
 //    }
 
     public User toEntityFromRegistrationDto(RegistrationDto registrationDto, String encodedPassword) {
+
         Set<Role> roles = new HashSet<>();
 
         roles.add(roleRepo.findByName("ROLE_User"));
 
-        if(registrationDto.getAdminToken().equals("abcde")){
+        if(registrationDto.getAdminToken() != null && registrationDto.getAdminToken().equals("abcde")){
             roles.add(roleRepo.findByName("ROLE_Admin"));
             roles.add(roleRepo.findByName("ROLE_Journalist"));
         }
@@ -54,5 +55,21 @@ public class UserConverter {
                 .password(encodedPassword)
                 .email(registrationDto.getEmail())
                 .build();
+    }
+
+    public Journalist toEntityFromRegistrationDtoJournalist(RegistrationDto registrationDto, String encodedPassword) {
+        Set<Role> roles = new HashSet<>();
+
+        roles.add(roleRepo.findByName("ROLE_User"));
+        roles.add(roleRepo.findByName("ROLE_Journalist"));
+
+        Journalist journalist = new Journalist();
+        journalist.setUsername(registrationDto.getUsername());
+        journalist.setCountry(registrationDto.getCountry());
+        journalist.setPassword(encodedPassword);
+        journalist.setEmail(registrationDto.getEmail());
+        journalist.setRoles(roles);
+
+        return journalist;
     }
 }

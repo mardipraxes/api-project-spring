@@ -1,6 +1,5 @@
 package mindswap.academy.app.config;
 
-import lombok.RequiredArgsConstructor;
 import mindswap.academy.app.filters.CustomAuthFilter;
 import mindswap.academy.app.filters.CustomOncePerRequestFilter;
 import mindswap.academy.app.service.UserServiceImpl;
@@ -10,10 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -45,7 +42,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
      * Current implementation of the security configuration.
-     * It allows for everyone to login and register.
+     * It allows for everyone to log in and register.
      * Only the admin can access all user data and find the external news from an external api.
      * Only journalists can post and edit news. Only the admin can delete news.
      * Journalists need a token to register as journalists
@@ -63,14 +60,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         http.cors();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
-        http.authorizeRequests().antMatchers(
-                "/api/login", "/api/register","/swagger-ui.html","/swagger-ui/index.html","/v3/api-docs/")
-                .permitAll();
+
         http.authorizeRequests()
                 .antMatchers(
-                        "/api/users","/api/findnews**","/api/news/delete**")
+                        "/api/login",
+                        "/api/register",
+                        "/swagger-ui.html",
+                        "/swagger-ui/**",
+                        "/swagger-ui**",
+                        "/docs",
+                        "/swagger-ui/index.html",
+                        "/v3**",
+                        "/v3/api-docs**",
+                        "/v3/api-docs/**",
+                        "/api/apply-journalist")
+                .permitAll();
+
+        http.authorizeRequests()
+                .antMatchers("/api/users","/api/findnews**","/api/news/delete**")
                 .hasRole("Admin");
-        http.authorizeRequests().antMatchers("/api/news/post").hasRole("Journalist");
+
+        http.authorizeRequests()
+                .antMatchers("/api/news/post", "/api/news/edit**")
+                .hasRole("Journalist");
+
         http.userDetailsService(userServiceImpl);
         http.authorizeRequests().anyRequest().authenticated();
         http.addFilter(customAuthFilter);

@@ -33,11 +33,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                                     FilterChain filterChain)
             throws ServletException, IOException {
 
-        if(request.getServletPath().equals("/api/login")
-                || request.getServletPath().equals("/api/register")
-                || request.getServletPath().equals("/swagger-ui/index.html")
-                || request.getServletPath().equals("/v3/api-docs/")
-                || request.getServletPath().equals("/swagger-ui.html")){
+        if(checkForPermittedPaths(request.getServletPath())) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -84,5 +80,19 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
             }
         }
+    }
+
+
+    private boolean checkForPermittedPaths(String path) {
+        return path.equals("/api/login")
+                || path.equals("/api/register")
+                || path.equals("/swagger-ui/index.html")
+                || path.equals("/v3/api-docs/")
+                || path.contains("swagger")
+                || path.contains("api-docs")
+                || path.equals("/docs")
+                || path.equals("/swagger-ui/index.html/")
+                || path.equals("/api/apply-journalist")
+                || path.equals("/swagger-ui.html");
     }
 }
