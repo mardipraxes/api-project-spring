@@ -50,18 +50,19 @@ public class AuthenticationService {
             throw new UserAlreadyExistsException(registrationDto.getUsername());
         }
 
-        JournalistApplications journalistApplications =
+        JournalistApplications journalistApplication =
                 journalistApplicationsRepo.findByUsername(registrationDto.getUsername());
 
-        if(journalistApplications != null &&
-                journalistApplications.getRegistrationToken().equals(registrationDto.getJournalistToken())) {
-            journalistApplicationsRepo.delete(journalistApplications);
+        if(journalistApplication != null &&
+                journalistApplication.getRegistrationToken().equals(registrationDto.getJournalistToken())) {
+            journalistApplicationsRepo.delete(journalistApplication);
             String encodedPassword = passwordEncoder.encode(registrationDto.getPassword());
-            Journalist journalist = (Journalist) userConverter
+            Journalist journalist =  userConverter
                     .toEntityFromRegistrationDtoJournalist(registrationDto, encodedPassword);
             journalist.setNewsPosts(new ArrayList<>());
             userRepo.save(journalist);
-
+            log.info("User {} successfully registered", registrationDto.getUsername());
+            return;
         }
 
         String encodedPassword = passwordEncoder.encode(registrationDto.getPassword());
@@ -86,9 +87,12 @@ public class AuthenticationService {
     //Returns a token in case of success, null otherwise
 
     public String applyJournalist(JournalistApplicationDto journalistApplicationDto) {
-        if(userRepo.findByUsername(journalistApplicationDto.getUsername()) != null) {
+        if(userRepo.findByUsername(journalistApplicationDto.getUsername()) != null
+        || userRepo.findByEmail(journalistApplicationDto.getEmail()) != null) {
+
             log.warn("User {} already exists", journalistApplicationDto.getUsername());
             throw new UserAlreadyExistsException(journalistApplicationDto.getUsername());
+
         }
 
         JournalistApplications journalistApplications = JournalistApplications.builder()

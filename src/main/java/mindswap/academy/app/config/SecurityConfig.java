@@ -64,7 +64,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.sessionManagement().sessionCreationPolicy(STATELESS);
         http.authorizeRequests().antMatchers(
-                "/api/login", "/api/register","/swagger-ui.html","/swagger-ui/index.html","/v3/api-docs/")
+                "/api/login", "/api/register","/swagger-ui.html","/swagger-ui/index.html","/v3/api-docs/","/api/apply-journalist")
                 .permitAll();
         http.authorizeRequests()
                 .antMatchers(

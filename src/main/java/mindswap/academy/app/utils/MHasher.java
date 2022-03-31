@@ -15,59 +15,58 @@ public class MHasher {
         sb.append("ja_token");
         return sb.toString();
     }
-
-    public String hashString(String str) {
-        long currentTimeMillis = System.currentTimeMillis();
-        long monthMilliseconds = 2629800000L;
-        String expirationTime = String.valueOf(currentTimeMillis + monthMilliseconds);
-
-        long codedExpirationTime = Long.parseLong(expirationTime) / M_BYTE;
-
-        int random = Integer.parseInt(expirationTime.substring(expirationTime.length() - 3));
-
-        byte[] expTimeBytes = String.valueOf(codedExpirationTime).getBytes();
-
-        StringBuilder date = new StringBuilder();
-
-        for (int i = 0; i < expTimeBytes.length; i++) {
-            int iterations = 0;
-            long overflow = (long) ((int) expTimeBytes[i]) + ((long) M_BYTE * random);
-
-            while(overflow > 154) {
-                overflow -= M_BYTE;
-                if(overflow <= 154) {
-                    expTimeBytes[i] = (byte) (overflow - M_BYTE);
-                    iterations++;
-                    break;
-                }
-                iterations++;
-            }
-            date.append(iterations);
-            date.append(".");
-            date.append(new String(expTimeBytes));
-        }
-
-        System.out.println("Date: " + date.toString());
-
-        StringBuilder sb = new StringBuilder();
-        sb.append(new String(expTimeBytes));
-        sb.append(":");
-
-        byte[] strBytes = str.getBytes();
-
-        for (int i = 0; i < strBytes.length; i++) {
-            if(strBytes[i] == M_BYTE) {
-                strBytes[i] = 0;
-            }
-            strBytes[i] = (byte) (strBytes[i] ^ M_BYTE - (7 ^ M_BYTE) + 1);
-            if(strBytes[i] == ' ') {
-                strBytes[i] = (byte)  M_BYTE;
-            }
-        }
-
-        sb.append(new String(strBytes));
-        return sb.toString();
-    }
+//    public String hashString(String str) {
+//        long currentTimeMillis = System.currentTimeMillis();
+//        long monthMilliseconds = 2629800000L;
+//        String expirationTime = String.valueOf(currentTimeMillis + monthMilliseconds);
+//
+//        long codedExpirationTime = Long.parseLong(expirationTime) / M_BYTE;
+//
+//        int random = Integer.parseInt(expirationTime.substring(expirationTime.length() - 3));
+//
+//        byte[] expTimeBytes = String.valueOf(codedExpirationTime).getBytes();
+//
+//        StringBuilder date = new StringBuilder();
+//
+//        for (int i = 0; i < expTimeBytes.length; i++) {
+//            int iterations = 0;
+//            long overflow = (long) ((int) expTimeBytes[i]) + ((long) M_BYTE * random);
+//
+//            while(overflow > 154) {
+//                overflow -= M_BYTE;
+//                if(overflow <= 154) {
+//                    expTimeBytes[i] = (byte) (overflow - M_BYTE);
+//                    iterations++;
+//                    break;
+//                }
+//                iterations++;
+//            }
+//            date.append(iterations);
+//            date.append(".");
+//            date.append(new String(expTimeBytes));
+//        }
+//
+//        System.out.println("Date: " + date.toString());
+//
+//        StringBuilder sb = new StringBuilder();
+//        sb.append(new String(expTimeBytes));
+//        sb.append(":");
+//
+//        byte[] strBytes = str.getBytes();
+//
+//        for (int i = 0; i < strBytes.length; i++) {
+//            if(strBytes[i] == M_BYTE) {
+//                strBytes[i] = 0;
+//            }
+//            strBytes[i] = (byte) (strBytes[i] ^ M_BYTE - (7 ^ M_BYTE) + 1);
+//            if(strBytes[i] == ' ') {
+//                strBytes[i] = (byte)  M_BYTE;
+//            }
+//        }
+//
+//        sb.append(new String(strBytes));
+//        return sb.toString();
+//    }
 
 
 //    public static void main(String[] args) {

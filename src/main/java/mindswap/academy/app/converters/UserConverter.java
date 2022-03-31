@@ -61,19 +61,19 @@ public class UserConverter {
                 .build();
     }
 
-    public User toEntityFromRegistrationDtoJournalist(RegistrationDto registrationDto, String encodedPassword) {
+    public Journalist toEntityFromRegistrationDtoJournalist(RegistrationDto registrationDto, String encodedPassword) {
         Set<Role> roles = new HashSet<>();
 
         roles.add(roleRepo.findByName("ROLE_User"));
         roles.add(roleRepo.findByName("ROLE_Journalist"));
 
+        Journalist journalist = new Journalist();
+        journalist.setUsername(registrationDto.getUsername());
+        journalist.setCountry(registrationDto.getCountry());
+        journalist.setPassword(encodedPassword);
+        journalist.setEmail(registrationDto.getEmail());
+        journalist.setRoles(roles);
 
-        return User.builder()
-                .username(registrationDto.getUsername())
-                .roles(roles)
-                .country(registrationDto.getCountry())
-                .password(encodedPassword)
-                .email(registrationDto.getEmail())
-                .build();
+        return journalist;
     }
 }
