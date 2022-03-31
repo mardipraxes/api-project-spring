@@ -1,9 +1,7 @@
 package mindswap.academy.app.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import mindswap.academy.app.commands.PasswordDto;
-import mindswap.academy.app.commands.RegistrationDto;
-import mindswap.academy.app.commands.UserDto;
+import mindswap.academy.app.commands.*;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.service.AuthenticationService;
 import mindswap.academy.app.service.UserInfoService;
@@ -78,6 +76,17 @@ public class UserController {
         userInfoService.changePassword(passwordDto);
 
         return ResponseEntity.ok("Successfully changed password");
+    }
+
+   @PatchMapping("/change-country")
+  private ResponseEntity<?> changeCountry(@RequestBody CountryDto countryDto) {
+        userInfoService.changeCountry(countryDto);
+        return ResponseEntity.ok("Successfully changed country");
+   }
+    @PatchMapping("/change-email")
+    private ResponseEntity<?> changeCountry(@RequestBody EmailDto emailDto) {
+        userInfoService.changeEmail(emailDto);
+        return ResponseEntity.ok("Successfully changed email");
     }
 
     @GetMapping("/logout")
