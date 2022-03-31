@@ -39,6 +39,6 @@ public class ExternalNews {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.MERGE)
     private Rating rating;
 }

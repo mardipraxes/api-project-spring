@@ -1,6 +1,7 @@
 package mindswap.academy.app.service;
 
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.commands.PasswordDto;
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.converters.UserConverter;
@@ -80,4 +81,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("User {} is trying to get his profile", username);
         return userConverter.toDto(userRepo.findByUsername(username));
     }
+
+
 }
