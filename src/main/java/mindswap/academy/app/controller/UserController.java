@@ -52,7 +52,7 @@ public class UserController {
     @PostMapping("/register")
     private ResponseEntity<?> registerUser(@Valid @RequestBody RegistrationDto registrationDto) {
 
-        if(!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
+        if (!registrationDto.getPassword().equals(registrationDto.getConfirmPassword())) {
             return ResponseEntity.badRequest().body("Passwords do not match");
         }
 
@@ -76,12 +76,12 @@ public class UserController {
         return ResponseEntity.ok("Successfully changed password");
     }
 
-   @PatchMapping("/change-country")
-  private ResponseEntity<?> changeCountry(@RequestBody CountryDto countryDto) {
+    @PatchMapping("/change-country")
+    private ResponseEntity<?> changeCountry(@RequestBody CountryDto countryDto) {
         userInfoService.changeCountry(countryDto);
         return ResponseEntity.ok("Successfully changed country");
 
-   }
+    }
 
     @PatchMapping("/change-email")
     private ResponseEntity<?> changeCountry(@RequestBody EmailDto emailDto) {
@@ -91,7 +91,7 @@ public class UserController {
 
     @GetMapping("/logout")
     private ResponseEntity<String> logout() {
-        if(SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (SecurityContextHolder.getContext().getAuthentication() == null) {
             return ResponseEntity.badRequest().body("User is not logged in");
         }
 
@@ -100,11 +100,15 @@ public class UserController {
         return ResponseEntity.ok("Successfully logged out");
     }
 
-    @GetMapping("/refresh-token")
-    private ResponseEntity<String> refreshSecurityToken() {
-        return ResponseEntity.ok("Successfully logged in");
+    @PostMapping("/apply-journalist")
+    private ResponseEntity<String> applyJournalist(@Valid @RequestBody JournalistApplicationDto journalistApplicationDto) {
+        authenticationService.applyJournalist(journalistApplicationDto);
+        return ResponseEntity.ok("Successfully applied for journalist, you can use this token to register: ");
     }
+
 }
+
+
 
 
 

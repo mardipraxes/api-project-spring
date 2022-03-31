@@ -2,6 +2,7 @@ package mindswap.academy.app.service;
 
 
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.commands.JournalistApplicationDto;
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.converters.UserConverter;
 import mindswap.academy.app.exceptions.UserAlreadyExistsException;
@@ -56,5 +57,11 @@ public class AuthenticationService {
     public void logout() {
         log.info("Logging out");
         SecurityContextHolder.clearContext();
+    }
+
+    //Returns a token in case of success, null otherwise
+
+    public String applyJournalist(JournalistApplicationDto journalistApplicationDto) {
+        return null;
     }
 }
