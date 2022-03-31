@@ -1,5 +1,6 @@
 package mindswap.academy.app.controller;
 
+import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.persistance.model.NewsPost;
@@ -70,6 +71,14 @@ public class NewsController {
 
         return ResponseEntity.ok().body(newsPostDtoList);
 
+    }
+
+    @PatchMapping("/edit/")
+    private ResponseEntity<?> editNews(@RequestBody EditNewsDto editNewsDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        newsService.editNews(username, editNewsDto);
+
+        return ResponseEntity.ok().body("News Edited");
     }
 }
 

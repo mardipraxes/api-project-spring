@@ -1,6 +1,7 @@
 package mindswap.academy.app.service;
 
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.converters.NewsConverter;
@@ -147,5 +148,18 @@ public class NewsServiceImpl implements NewsService {
         }
 
         return newsRepo.findByJournalist(user).stream().map(newsConverter::toDto).toList();
+    }
+
+    public void editNews(String username, EditNewsDto editNewsDto) {
+        NewsPost newsPost = newsRepo.findByTitle(editNewsDto.getTitle()).orElseThrow(NewsNotFoundException::new);
+        if(!newsPost.getJournalist().getUsername().equals(username)) {
+            log.warn("User with username: {} is not the author of news post with title: {}", username, newsPost.getTitle());
+            throw new ParametersDontMatchException(username, newsPost.getTitle());
+        }
+
+        newsPost.setTitle(editNewsDto.getTitle());
+        newsPost.setContent(editNewsDto.getContent());
+        newsRepo.save(newsPost);
+        log.info("Edited news post with title: {}", newsPost.getTitle());
     }
 }
