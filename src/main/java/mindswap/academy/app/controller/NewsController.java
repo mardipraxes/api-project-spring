@@ -80,5 +80,14 @@ public class NewsController {
 
         return ResponseEntity.ok().body("News Edited");
     }
+
+    // Needs Admin Role
+    @DeleteMapping("/delete/{id}")
+    private ResponseEntity<?> deleteNews(@PathVariable("id") Long id) {
+
+        newsService.deleteNews(id);
+
+        return ResponseEntity.ok().body("News Deleted with id: " + id);
+    }
 }
 

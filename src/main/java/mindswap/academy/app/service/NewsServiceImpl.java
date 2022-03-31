@@ -158,8 +158,38 @@ public class NewsServiceImpl implements NewsService {
         }
 
         newsPost.setTitle(editNewsDto.getTitle());
-        newsPost.setContent(editNewsDto.getContent());
+
+        if(!checkForValidEditBody(editNewsDto)) {
+            log.warn("Only changing news title...");
+        }
+
+        if(checkForEmptyEditBody(editNewsDto)) {
+            log.warn("User sent empty parameters, nothing to edit...");
+
+        } else {
+            // These ternary statements are to prevent null pointer exceptions
+
+            newsPost.setContent(editNewsDto.getContent() == null ? newsPost.getContent() : editNewsDto.getContent());
+
+            newsPost.setImageURL(editNewsDto.getImageURL() == null ? newsPost.getImageURL() : editNewsDto.getImageURL());
+        }
+
         newsRepo.save(newsPost);
+
         log.info("Edited news post with title: {}", newsPost.getTitle());
+    }
+
+    private boolean checkForEmptyEditBody(EditNewsDto editNewsDto) {
+        return editNewsDto.getContent().equals("") || editNewsDto.getImageURL().equals("");
+    }
+
+    private boolean checkForValidEditBody(EditNewsDto editNewsDto) {
+        return editNewsDto.getContent() == null && editNewsDto.getImageURL() == null;
+    }
+
+    public void deleteNews(Long id) {
+        NewsPost newsPost = newsRepo.findById(id).orElseThrow(NewsNotFoundException::new);
+        newsRepo.delete(newsPost);
+        log.info("Deleted news post with id: {}", id);
     }
 }
