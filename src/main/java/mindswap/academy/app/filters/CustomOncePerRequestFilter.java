@@ -46,7 +46,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
 
         log.info("Authorization header: {}", authorizationHeader);
 
-        if(authorizationHeader == null ){
+       if(authorizationHeader == null ){
             response.setStatus(FORBIDDEN.value());
             response.setContentType(APPLICATION_JSON.toString());
             response.getWriter().write("{\"message\": \"No token provided\"}");
