@@ -4,13 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.converters.NewsConverter;
-import mindswap.academy.app.exceptions.InvalidQueryException;
-import mindswap.academy.app.exceptions.NewsNotFoundException;
-import mindswap.academy.app.exceptions.NewsPostAlreadyExistsException;
+import mindswap.academy.app.exceptions.*;
 import mindswap.academy.app.persistance.model.ExternalNews;
+import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.NewsPost;
+import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
 import mindswap.academy.app.persistance.repository.NewsRepo;
+import mindswap.academy.app.persistance.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,10 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private ExternalNewsRepo externalNewsRepo;
+
+    @Autowired
+    private UserRepo userRepo;
+
 
 
     public void postNews(NewsPostDto newsPostDto) {
@@ -127,5 +132,20 @@ public class NewsServiceImpl implements NewsService {
 
         return newsPostDtoList;
 
+    }
+
+    public List<NewsPostDto> findMyNews(String username) {
+        User user = userRepo.findByUsername(username);
+        if(user == null) {
+            log.warn("User with username: {} not found", username);
+            throw new UserNotFoundException(username);
+        }
+
+        if(!(user instanceof Journalist)) {
+            log.warn("User with username: {} is not a journalist", username);
+            throw new NotAJournalistException(username);
+        }
+
+        return newsRepo.findByJournalist(user).stream().map(newsConverter::toDto).toList();
     }
 }

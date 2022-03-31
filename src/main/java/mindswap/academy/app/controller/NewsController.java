@@ -6,6 +6,7 @@ import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.service.NewsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -57,6 +58,17 @@ public class NewsController {
         List<NewsPostDto> foundNews = newsService.findAllNewsByCategory(categories);
 
         return ResponseEntity.ok().body(foundNews);
+
+    }
+
+    @GetMapping("/findmynews/")
+    private ResponseEntity<List<NewsPostDto>> getMyNews() {
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        List<NewsPostDto> newsPostDtoList = newsService.findMyNews(username);
+
+        return ResponseEntity.ok().body(newsPostDtoList);
 
     }
 }

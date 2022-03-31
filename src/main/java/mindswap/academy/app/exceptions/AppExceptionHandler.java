@@ -53,6 +53,12 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
 
+    @ExceptionHandler(value = NotAJournalistException.class)
+    public ResponseEntity<ErrorMessage> dealWithNotAJournalist(Exception e, HttpServletRequest request) {
+        ErrorMessage error = buildError(e, request, HttpStatus.FORBIDDEN.toString());
+        return new ResponseEntity<>(error, HttpStatus.FORBIDDEN);
+    }
+
     private ErrorMessage buildError(Exception e, HttpServletRequest request, String statusCode) {
         return ErrorMessage.builder()
                 .timestamp(new Date())

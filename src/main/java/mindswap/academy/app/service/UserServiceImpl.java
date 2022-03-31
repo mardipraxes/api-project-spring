@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,6 +82,4 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("User {} is trying to get his profile", username);
         return userConverter.toDto(userRepo.findByUsername(username));
     }
-
-
 }

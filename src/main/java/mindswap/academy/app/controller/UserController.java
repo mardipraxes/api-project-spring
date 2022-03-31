@@ -90,6 +90,11 @@ public class UserController {
 
         return ResponseEntity.ok("Successfully logged out");
     }
+
+    @GetMapping("/refresh-token")
+    private ResponseEntity<String> refreshSecurityToken() {
+        return ResponseEntity.ok("Successfully logged in");
+    }
 }
 
 
