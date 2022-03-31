@@ -78,4 +78,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         log.info("User {} is trying to get his profile", username);
         return userConverter.toDto(userRepo.findByUsername(username));
     }
+
+    public User getUserByUsername(String username) {
+        return userRepo.findByUsername(username);
+    }
 }

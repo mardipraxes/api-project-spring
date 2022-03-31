@@ -73,7 +73,7 @@ public class AuthenticationService {
 
     public Collection<? extends GrantedAuthority> getAuthorities(Set<Role> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>();
-        roles.stream().forEach(role -> {
+        roles.forEach(role -> {
             authorities.add(new SimpleGrantedAuthority(role.getName()));
         });
         return authorities;

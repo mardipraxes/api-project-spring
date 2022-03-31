@@ -7,7 +7,6 @@ import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.RoleRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -39,17 +38,14 @@ public class UserConverter {
 //    }
 
     public User toEntityFromRegistrationDto(RegistrationDto registrationDto, String encodedPassword) {
+
         Set<Role> roles = new HashSet<>();
 
         roles.add(roleRepo.findByName("ROLE_User"));
 
-        if(registrationDto.getAdminToken().equals("abcde")){
+        if(registrationDto.getAdminToken() != null && registrationDto.getAdminToken().equals("abcde")){
             roles.add(roleRepo.findByName("ROLE_Admin"));
             roles.add(roleRepo.findByName("ROLE_Journalist"));
-        }
-
-        if(registrationDto.getJournalistToken().equals(registrationDto.getJournalistToken())){
-
         }
 
         return User.builder()
