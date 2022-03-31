@@ -1,9 +1,9 @@
 server:
   port: ${SERVER_PORT:8081}
-#jwt:
-#  secret: 123456
-#algorithm:
-#  secret-code: christyronie420blazeit
+springdoc:
+  swagger-ui:
+    enabled: true
+    path: /docs
 spring:
   output:
     ansi:
@@ -16,7 +16,7 @@ spring:
       ddl-auto: ${HIBERNATE_DDL_AUTO:update}
       show-sql: true
   datasource:
-    url: ${MARIADB_URL:jdbc:mariadb://localhost:3306/news-api}
+    url: ${MARIADB_URL:jdbc:mariadb://localhost:3306/newsapi}
     username: ${MARIADB_USER:root}
     password: ${MARIADB_PASSWORD:mypass}
 #    url: ${MARIADB_URL:jdbc:mariadb://ms-2nd-edition-groups-db00006104.mdb0002418.db.skysql.net:5003/group2?useSSL=true&trustServerCertificate=true}

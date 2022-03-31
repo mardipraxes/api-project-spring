@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  newsapi-mariadb:
+    image: mariadb:latest
+    container_name: newsapi-mariadb
+    ports:
+      - '3306:3306'
+    #   volumes:
+    #     - './data/mariadb:/var/lib/mysql'
+    environment:
+      MARIADB_ROOT_PASSWORD: 'mypass'
+      MARIADB_DATABASE: 'newsapi'
+    restart: always
+  news-app:
+    image : newsapi-service
+    restart: on-failure
+    container_name: newsapi-app
+    depends_on:
+      - newsapi-mariadb
+    ports:
+      - '8081:8081'
+    environment:
+      MARIADB_DB: 'newsapi'
+      MARIADB_USER: 'root'
+      MARIADB_PASSWORD: 'mypass'
+      MARIADB_URL: jdbc:mariadb://newsapi-mariadb:3306/newsapi
+      SERVER_PORT: '8081'
+      HIBERNATE_DDL_AUTO: 'create-drop'
+

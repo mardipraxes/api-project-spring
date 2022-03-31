@@ -88,6 +88,10 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
                 || path.equals("/api/register")
                 || path.equals("/swagger-ui/index.html")
                 || path.equals("/v3/api-docs/")
+                || path.contains("swagger")
+                || path.contains("api-docs")
+                || path.equals("/docs")
+                || path.equals("/swagger-ui/index.html/")
                 || path.equals("/api/apply-journalist")
                 || path.equals("/swagger-ui.html");
     }
