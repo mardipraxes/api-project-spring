@@ -102,8 +102,8 @@ public class UserController {
 
     @PostMapping("/apply-journalist")
     private ResponseEntity<String> applyJournalist(@Valid @RequestBody JournalistApplicationDto journalistApplicationDto) {
-        authenticationService.applyJournalist(journalistApplicationDto);
-        return ResponseEntity.ok("Successfully applied for journalist, you can use this token to register: ");
+        String token = authenticationService.applyJournalist(journalistApplicationDto);
+        return ResponseEntity.ok("Successfully applied for journalist, you can use this token to register: " + token);
     }
 
 }

@@ -1,7 +1,13 @@
 package mindswap.academy.app.persistance.model;
 
-import javax.persistence.*;
+import lombok.*;
 
+import javax.persistence.*;
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "journalist_applications")
 public class JournalistApplications {

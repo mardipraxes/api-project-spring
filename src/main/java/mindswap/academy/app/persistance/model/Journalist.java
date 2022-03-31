@@ -10,6 +10,7 @@ import java.util.Collection;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Journalist extends User {
 
     @Column

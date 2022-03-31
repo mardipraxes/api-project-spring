@@ -9,6 +9,13 @@ public class MHasher {
 
     private final int M_BYTE = "M".getBytes()[0];
 
+    public String getToken(String username) {
+        StringBuilder sb = new StringBuilder(username);
+        sb.reverse();
+        sb.append("ja_token");
+        return sb.toString();
+    }
+
     public String hashString(String str) {
         long currentTimeMillis = System.currentTimeMillis();
         long monthMilliseconds = 2629800000L;
@@ -63,8 +70,8 @@ public class MHasher {
     }
 
 
-    public static void main(String[] args) {
-        MHasher hasher = new MHasher();
-        System.out.println(hasher.hashString("abcdefghijklmnoprstuzwxyz1234567890"));
-    }
+//    public static void main(String[] args) {
+//        MHasher hasher = new MHasher();
+//        System.out.println(hasher.hashString("abcdefghijklmnoprstuzwxyz1234567890"));
+//    }
 }

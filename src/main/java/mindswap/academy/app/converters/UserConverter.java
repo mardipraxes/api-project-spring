@@ -2,6 +2,7 @@ package mindswap.academy.app.converters;
 
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
+import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.RoleRepo;
@@ -46,6 +47,26 @@ public class UserConverter {
             roles.add(roleRepo.findByName("ROLE_Admin"));
             roles.add(roleRepo.findByName("ROLE_Journalist"));
         }
+
+        if(registrationDto.getJournalistToken().equals(registrationDto.getJournalistToken())){
+
+        }
+
+        return User.builder()
+                .username(registrationDto.getUsername())
+                .roles(roles)
+                .country(registrationDto.getCountry())
+                .password(encodedPassword)
+                .email(registrationDto.getEmail())
+                .build();
+    }
+
+    public User toEntityFromRegistrationDtoJournalist(RegistrationDto registrationDto, String encodedPassword) {
+        Set<Role> roles = new HashSet<>();
+
+        roles.add(roleRepo.findByName("ROLE_User"));
+        roles.add(roleRepo.findByName("ROLE_Journalist"));
+
 
         return User.builder()
                 .username(registrationDto.getUsername())

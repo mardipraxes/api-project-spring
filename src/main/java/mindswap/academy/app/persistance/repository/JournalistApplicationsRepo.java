@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface JournalistApplicationsRepo extends JpaRepository<JournalistApplications, Long> {
 
+    JournalistApplications findByUsername(String username);
 }
