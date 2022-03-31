@@ -61,11 +61,12 @@ public class CustomAuthFilter extends UsernamePasswordAuthenticationFilter {
                 .sign(algorithm);
 
         String refreshToken = JWT.create()
-                .withExpiresAt(new Date(System.currentTimeMillis() + 30 * 60 * 1000))
+                .withExpiresAt(new Date(System.currentTimeMillis() + 1000 * 60 * 1000))
                 .withIssuer(request.getRequestURL().toString())
                 .sign(algorithm);
 
         response.setHeader("access_token", accessToken);
         response.setHeader("refresh_token", refreshToken);
+
     }
 }
