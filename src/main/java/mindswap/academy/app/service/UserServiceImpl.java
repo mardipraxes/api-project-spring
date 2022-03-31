@@ -34,15 +34,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Autowired
     private UserConverter userConverter;
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
-        if(user == null) {
+
+        if (user == null) {
             log.warn("User {} not found", username);
             throw new UserNotFoundException(username);
         }
-
 
         log.info("User {} is trying to log in..", username);
 
@@ -53,7 +52,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                         .toList();
 
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
-
     }
 
     public List<UserDto> getAllUsers() {
@@ -65,7 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public UserDto getUserById(Long id) {
 
-        if(id < 1) {
+        if (id < 1) {
             log.warn("Invalid user id {}", id);
             throw new InvalidRequestException(id.toString());
         }
@@ -74,8 +72,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .map(userConverter::toDto)
                 .orElseThrow(() -> new UserNotFoundException(id.toString()));
     }
-
-
 
     public UserDto getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();

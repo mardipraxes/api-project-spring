@@ -1,6 +1,8 @@
 package mindswap.academy.app.service;
 
 import lombok.extern.slf4j.Slf4j;
+import mindswap.academy.app.commands.CountryDto;
+import mindswap.academy.app.commands.EmailDto;
 import mindswap.academy.app.commands.PasswordDto;
 import mindswap.academy.app.exceptions.InvalidRequestException;
 import mindswap.academy.app.exceptions.UserNotFoundException;
@@ -26,14 +28,13 @@ public class UserInfoService implements UserService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         log.info("User {} is trying to change his password", username);
         User user = userRepo.findByUsername(username);
-        if(user == null) {
+        if (user == null) {
             log.warn("User {} not found", username);
             throw new UserNotFoundException(username);
         }
 
 
-
-        if(!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(passwordDto.getOldPassword(), user.getPassword())) {
             log.warn("Wrong password");
             throw new InvalidRequestException("Wrong password");
         }
@@ -42,4 +43,29 @@ public class UserInfoService implements UserService {
 
         userRepo.save(user);
     }
+
+    public void changeCountry(CountryDto countryDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("User {} is trying to change his country", username);
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            log.warn("User {} not found", username);
+            throw new UserNotFoundException(username);
+        }
+        user.setCountry(countryDto.getNewCountry());
+        userRepo.save(user);
+    }
+
+    public void changeEmail(EmailDto emailDto) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        log.info("User {} is trying to change his email", username);
+        User user = userRepo.findByUsername(username);
+        if (user == null) {
+            log.warn("User {} not found", username);
+            throw new UserNotFoundException(username);
+        }
+        user.setEmail(emailDto.getNewEmail());
+        userRepo.save(user);
+    }
+
 }

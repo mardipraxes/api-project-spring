@@ -28,9 +28,9 @@ public class SetupDataLoader {
     @EventListener(classes = { ContextStoppedEvent.class, ContextRefreshedEvent.class })
     public void onApplicationEvent() {
         System.out.println("ContextStoppedEvent or ContextRefreshedEvent");
-       if (!loaded) {
-          userDataLoader.loadData();
-            loaded = true;
-        }
+    //   if (!loaded) {
+    //      userDataLoader.loadData();
+    //        loaded = true;
+    //    }
     }
 }

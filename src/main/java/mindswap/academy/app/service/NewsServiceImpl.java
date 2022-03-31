@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Slf4j
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -40,7 +41,8 @@ public class NewsServiceImpl implements NewsService {
 
     public void postNews(NewsPostDto newsPostDto) {
 
-        if(newsRepo.findByTitle(newsPostDto.getTitle()).isPresent()) {
+        if (newsRepo.findByTitle(newsPostDto.getTitle()).isPresent()) {
+            log.warn("News post already exists");
             throw new NewsPostAlreadyExistsException(newsPostDto.getTitle());
         }
         newsRepo.save(newsConverter.toEntity(newsPostDto));
@@ -50,13 +52,14 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsPostDto> findNews(String[] categories, String[] author) {
 
         List<NewsPost> newsPosts = new ArrayList<>();
-        if(!verifyValidQuery(categories, author)) {
+        if (!verifyValidQuery(categories, author)) {
+            log.warn("Invalid query");
             throw new InvalidQueryException();
         }
 
         Arrays.stream(categories).forEach(category -> newsPosts.addAll(newsRepo.findByCategories(category)));
         List<NewsPost> newsPostsFilteredByAuthor = new ArrayList<>();
-        if(author != null) {
+        if (author != null) {
             newsPosts.stream()
                     .filter(newsPost ->
                             Arrays.stream(author)
@@ -65,7 +68,8 @@ public class NewsServiceImpl implements NewsService {
                                                     .equals(newsPost.getJournalist().getUsername())))
                     .forEach(newsPostsFilteredByAuthor::add);
 
-            if(newsPostsFilteredByAuthor.size() == 0) {
+            if (newsPostsFilteredByAuthor.size() == 0) {
+                log.warn("No news found");
                 throw new InvalidQueryException();
             }
 
