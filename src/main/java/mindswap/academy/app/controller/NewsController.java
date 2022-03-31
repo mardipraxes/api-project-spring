@@ -44,5 +44,20 @@ public class NewsController {
 
         return ResponseEntity.ok().body("News Rated");
     }
+
+    /**
+     * This method unlike the search, it returns all the news posts including external news posts.
+     *
+     * @param categories - categories of the news posts
+     * @return a response entity with the list of news posts
+     */
+    @GetMapping("/find")
+    private ResponseEntity<?> getNews(@RequestParam(value = "categories", defaultValue = "[]") String[] categories) {
+
+        List<NewsPostDto> foundNews = newsService.findAllNewsByCategory(categories);
+
+        return ResponseEntity.ok().body(foundNews);
+
+    }
 }
 

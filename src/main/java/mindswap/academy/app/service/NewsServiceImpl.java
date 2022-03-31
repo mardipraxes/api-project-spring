@@ -7,7 +7,9 @@ import mindswap.academy.app.converters.NewsConverter;
 import mindswap.academy.app.exceptions.InvalidQueryException;
 import mindswap.academy.app.exceptions.NewsNotFoundException;
 import mindswap.academy.app.exceptions.NewsPostAlreadyExistsException;
+import mindswap.academy.app.persistance.model.ExternalNews;
 import mindswap.academy.app.persistance.model.NewsPost;
+import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
 import mindswap.academy.app.persistance.repository.NewsRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Autowired
     private NewsConverter newsConverter;
+
+    @Autowired
+    private ExternalNewsRepo externalNewsRepo;
 
 
     public void postNews(NewsPostDto newsPostDto) {
@@ -92,5 +97,35 @@ public class NewsServiceImpl implements NewsService {
         newsPost.getRating().setTruthfulness(newsPost.getRating().getTruthfulness() + ratingDto.getTruthfulness());
         log.info("Added rating to news post with title: {}", newsPost.getTitle());
         newsRepo.save(newsPost);
+    }
+
+    public List<NewsPostDto> findAllNewsByCategory(String[] categories) {
+        if(categories == null) {
+            log.warn("No categories provided");
+            throw new InvalidQueryException();
+        }
+
+        List<NewsPost> newsPosts = new ArrayList<>();
+        List<ExternalNews> externalNewsList = new ArrayList<>();
+        List<NewsPostDto> newsPostDtoList = new ArrayList<>();
+
+
+
+        Arrays.stream(categories).forEach(category ->
+                newsPosts.addAll(newsRepo.findByCategories(category)));
+
+        Arrays.stream(categories).forEach(category ->
+                externalNewsList.addAll(externalNewsRepo.findByCategory(category)));
+
+        newsPosts.stream().map(newsConverter::toDto).forEach(newsPostDtoList::add);
+        externalNewsList.stream().map(newsConverter::toDtoFromExternalNews).forEach(newsPostDtoList::add);
+
+        if(newsPostDtoList.size() == 0) {
+            log.warn("No news posts found");
+            throw new NewsNotFoundException();
+        }
+
+        return newsPostDtoList;
+
     }
 }
