@@ -108,12 +108,13 @@ public class NewsServiceImpl implements NewsService {
 
         NewsPost newsPost = newsRepo.findByTitleURL(title).orElseThrow(NewsNotFoundException::new);
 
-
-        // Object.equals() to prevent null pointer exceptions
-        if(Objects.equals(newsPost.getId(), ratingTrackerRepo.getByUserId(userId).getNewsId())){
-            log.warn("User already rated this news");
-            throw new UserAlreadyRatedException(username, title);
+        if(ratingTrackerRepo.getByUserId(userId) != null) {
+            if(Objects.equals(newsPost.getId(), ratingTrackerRepo.getByUserId(userId).getNewsId())){
+                log.warn("User already rated this news");
+                throw new UserAlreadyRatedException(username, title);
+            }
         }
+
 
         newsPost.getRating()
                 .setCounter(

@@ -36,7 +36,7 @@ public class DataLoader {
            User user = User.builder()
                     .username(names[i].toLowerCase() + ((int) (Math.random() * 100)))
                     .email(names[i].concat(String.valueOf((int) (Math.random() * 40) + 1960)).toLowerCase() + "@gmail.com")
-                    .password(passwordEncoder.encode("123456"))
+                    .password(passwordEncoder.encode("123Aa!"))
                     .country("USA").build();
 
 //           user.setRoles(new HashSet<>());
@@ -48,7 +48,7 @@ public class DataLoader {
             Journalist journalist = new Journalist();
             journalist.setUsername(names[i].toLowerCase() + ((int) (Math.random() * 100)));
             journalist.setEmail(names[i].concat(String.valueOf((int) (Math.random() * 40) + 1960)).toLowerCase() + "@journalist.com");
-            journalist.setPassword("123456");
+            journalist.setPassword(passwordEncoder.encode("123Aa!"));
             journalist.setCountry("USA");
 //            journalist.setNewsPosts(new HashSet<>());
 //            journalist.getNewsPosts().add(newsRepo.findByTitle("Russia killed levensky").get());
