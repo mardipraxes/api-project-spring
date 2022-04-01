@@ -28,7 +28,10 @@ public class NewsPost {
     @ManyToOne(fetch = FetchType.LAZY)
     private Journalist journalist;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @ManyToMany(fetch = FetchType.EAGER,
+            cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE})
     @JoinTable(name = "news_categories", joinColumns =
     @JoinColumn(name = "news_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
@@ -38,9 +41,13 @@ public class NewsPost {
     private Date publishedDate;
 
 
-    @OneToOne(mappedBy = "news", cascade = CascadeType.MERGE)
+    @OneToOne(mappedBy = "news", cascade = CascadeType.ALL)
     private Rating rating;
 
     @Column
     private String imageURL;
+
+    @Column
+    private String titleURL;
+
 }

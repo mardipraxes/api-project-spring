@@ -24,4 +24,5 @@ public class NewsPostDto {
 
     private String imageURL;
 
+
 }

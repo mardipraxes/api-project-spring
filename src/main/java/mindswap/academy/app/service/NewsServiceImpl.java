@@ -12,13 +12,16 @@ import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
 import mindswap.academy.app.persistance.repository.NewsRepo;
+import mindswap.academy.app.persistance.repository.RatingTrackerRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,6 +40,9 @@ public class NewsServiceImpl implements NewsService {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private RatingTrackerRepo ratingTrackerRepo;
+
 
 
     public void postNews(NewsPostDto newsPostDto) {
@@ -52,7 +58,7 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsPostDto> findNews(String[] categories, String[] author) {
 
         List<NewsPost> newsPosts = new ArrayList<>();
-        if (!verifyValidQuery(categories, author)) {
+        if (verifyValidQuery(categories)) {
             log.warn("Invalid query");
             throw new InvalidQueryException();
         }
@@ -90,12 +96,26 @@ public class NewsServiceImpl implements NewsService {
         return newsPosts;
     }
 
-    private boolean verifyValidQuery(String[] categories, String[] author) {
-        return categories == null;
+    private boolean verifyValidQuery(String[] categories) {
+        return categories != null && categories.length > 0;
     }
 
     public void rateNews(String title, RatingDto ratingDto) {
-        NewsPost newsPost = newsRepo.findByTitle(title).orElseThrow(NewsNotFoundException::new);
+
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        Long userId = userRepo.findByUsername(username).getId();
+
+        NewsPost newsPost = newsRepo.findByTitleURL(title).orElseThrow(NewsNotFoundException::new);
+
+        if(ratingTrackerRepo.getByUserId(userId) != null) {
+            if(Objects.equals(newsPost.getId(), ratingTrackerRepo.getByUserId(userId).getNewsId())){
+                log.warn("User already rated this news");
+                throw new UserAlreadyRatedException(username, title);
+            }
+        }
+
+
         newsPost.getRating()
                 .setCounter(
                         newsPost.getRating().getCounter() == null ?
@@ -195,5 +215,12 @@ public class NewsServiceImpl implements NewsService {
         NewsPost newsPost = newsRepo.findById(id).orElseThrow(NewsNotFoundException::new);
         newsRepo.delete(newsPost);
         log.info("Deleted news post with id: {}", id);
+    }
+
+    public NewsPostDto getNews(String title) {
+
+        NewsPost newsPost = newsRepo.findByTitleURL(title).orElseThrow(NewsNotFoundException::new);
+
+        return newsConverter.toDto(newsPost);
     }
 }

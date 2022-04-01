@@ -30,11 +30,12 @@ public class MHasher {
 //
 //        for (int i = 0; i < expTimeBytes.length; i++) {
 //            int iterations = 0;
-//            long overflow = (long) ((int) expTimeBytes[i]) + ((long) M_BYTE * random);
+//            long overflow = (long) ((int) expTimeBytes[i]) + ((long) M_BYTE ^ M_BYTE);
 //
 //            while(overflow > 154) {
 //                overflow -= M_BYTE;
 //                if(overflow <= 154) {
+//                    System.out.println(overflow);
 //                    expTimeBytes[i] = (byte) (overflow - M_BYTE);
 //                    iterations++;
 //                    break;
@@ -67,8 +68,8 @@ public class MHasher {
 //        sb.append(new String(strBytes));
 //        return sb.toString();
 //    }
-
-
+//
+//
 //    public static void main(String[] args) {
 //        MHasher hasher = new MHasher();
 //        System.out.println(hasher.hashString("abcdefghijklmnoprstuzwxyz1234567890"));

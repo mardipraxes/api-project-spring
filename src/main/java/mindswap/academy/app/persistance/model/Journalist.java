@@ -13,7 +13,7 @@ import java.util.Collection;
 public class Journalist extends User {
 
     @Column
-    @OneToMany(mappedBy = "journalist")
+    @OneToMany(mappedBy = "journalist", cascade = CascadeType.ALL)
     private Collection<NewsPost> newsPosts;
 
 }

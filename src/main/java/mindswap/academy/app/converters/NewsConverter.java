@@ -42,12 +42,15 @@ public class NewsConverter {
 
     public NewsPost toEntity(NewsPostDto newsPostDto){
 
+        String titleURL = newsPostDto.getTitle().replaceAll(" ", "-").toLowerCase().trim();
+
         NewsPost newsPost = NewsPost
                 .builder()
                 .title(newsPostDto.getTitle())
                 .content(newsPostDto.getContent())
                 .categories(new ArrayList<>())
                 .publishedDate(new Date())
+                .titleURL(titleURL)
                 .imageURL(newsPostDto.getImageURL())
                 .build();
 
@@ -92,11 +95,14 @@ public class NewsConverter {
 
     public ExternalNews toExternalNewsEntity(NewsFindDto newsFindDto) {
 
+        String titleURL = newsFindDto.getTitle().replaceAll(" ", "-").toLowerCase().trim();
+
         ExternalNews externalNews = ExternalNews.builder()
                 .title(newsFindDto.getTitle())
                 .description(newsFindDto.getDescription())
                 .author(newsFindDto.getAuthor())
                 .country(newsFindDto.getCountry())
+                .titleURL(titleURL)
                 .language(newsFindDto.getLanguage())
                 .urlToImage(newsFindDto.getImage())
                 .publishedAt(newsFindDto.getPublishedAt())

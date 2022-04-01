@@ -65,6 +65,12 @@ public class AppExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = UserAlreadyRatedException.class)
+    public ResponseEntity<ErrorMessage> dealWithUserAlreadyRated(Exception e, HttpServletRequest request) {
+        ErrorMessage error = buildError(e, request, HttpStatus.CONFLICT.toString());
+        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    }
+
     private ErrorMessage buildError(Exception e, HttpServletRequest request, String statusCode) {
         return ErrorMessage.builder()
                 .timestamp(new Date())

@@ -1,6 +1,15 @@
 package mindswap.academy.app.utils;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class StringUtil {
+
+    private static final Pattern PASSWORD_REGEX =
+            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&\\-+=()])(?=\\S+$).{6,20}$");
+
+    private static final Pattern EMAIL_REGEX =
+            Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
 
     public static final String names = "Michael\n" +
             "Christopher\n" +
@@ -46,8 +55,56 @@ public class StringUtil {
             "Lauren\n" +
             "Amber";
 
+    public static String news_titles = "The New York Times\n" +
+            "The Washington Post\n" +
+            "The Wall Street Journal\n" +
+            "The Washington Times\n";
+
+    public static String news_content = "The New York Times\n" +
+            "The Washington Post\n" +
+            "The Wall Street Journal\n" +
+            "The Washington Times\n";
+
+    public static String news_categories = "Russia\n" +
+            "Business\n" +
+            "Technology\n" +
+            "Sports\n" +
+            "Entertainment\n" +
+            "Science\n" +
+            "Health\n" +
+            "Politics\n" +
+            "World\n";
+
+    public static String[] getNewsTitlesArray(){
+        return news_titles.split("\n");
+    }
+
+    public static String[] getNewsContentArray(){
+        return news_content.split("\n");
+    }
+
+
+    public static boolean isValidPassword(String password) {
+        Matcher matcher = PASSWORD_REGEX.matcher(password);
+        return matcher.matches();
+    }
+//    @Deprecated
+    public static boolean isValidEmail(String email) {
+        Matcher matcher = EMAIL_REGEX.matcher(email);
+        return matcher.matches();
+    }
+
 
     public static String[] getNamesArray(){
         return names.split("\n");
     }
+
+    public static String[] getCategoriesArray() {
+        return news_categories.split("\n");
+    }
+
+//    public static void main(String[] args) {
+//        System.out.println(isValidPassword("123Aa!"));
+//        System.out.println(isValidEmail("john@gmail.com"));
+//    }
 }

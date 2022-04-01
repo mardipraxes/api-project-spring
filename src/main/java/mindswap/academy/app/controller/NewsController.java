@@ -1,5 +1,6 @@
 package mindswap.academy.app.controller;
 
+import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
@@ -14,6 +15,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@Slf4j
 @RequestMapping("/api/news")
 public class NewsController {
 
@@ -45,6 +47,13 @@ public class NewsController {
         newsService.rateNews(title,ratingDto);
 
         return ResponseEntity.ok().body("News Rated");
+    }
+
+    @GetMapping("/{title}")
+    private ResponseEntity<NewsPostDto> getNews(@PathVariable("title") String title) {
+        log.info("Getting news with title: " + title);
+        return ResponseEntity.ok().body(newsService.getNews(title));
+
     }
 
     /**
