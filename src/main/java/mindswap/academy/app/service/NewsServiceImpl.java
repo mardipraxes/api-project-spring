@@ -15,7 +15,6 @@ import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
 import mindswap.academy.app.persistance.repository.NewsRepo;
 import mindswap.academy.app.persistance.repository.RatingTrackerRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -106,8 +105,8 @@ public class NewsServiceImpl implements NewsService {
 
         NewsPost newsPost = newsRepo.findByTitleURL(title).orElseThrow(NewsNotFoundException::new);
 
-        if(ratingTrackerRepo.getByUserId(userId) != null) {
-            if(Objects.equals(newsPost.getId(), ratingTrackerRepo.getByUserId(userId).getNewsId())){
+        if(ratingTrackerRepo.findByUserId(userId) != null) {
+            if(Objects.equals(newsPost.getId(), ratingTrackerRepo.findByUserId(userId).getNewsId())){
                 log.warn("User already rated this news");
                 throw new UserAlreadyRatedException(username, title);
             }

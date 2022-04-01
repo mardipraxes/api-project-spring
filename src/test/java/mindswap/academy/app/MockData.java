@@ -1,8 +1,6 @@
 package mindswap.academy.app;
 
-import mindswap.academy.app.commands.NewsPostDto;
-import mindswap.academy.app.commands.RegistrationDto;
-import mindswap.academy.app.commands.UserDto;
+import mindswap.academy.app.commands.*;
 import mindswap.academy.app.persistance.model.*;
 
 import java.util.List;
@@ -88,6 +86,30 @@ public class MockData {
     public static Role getMockRole() {
         return Role.builder()
                 .name("ROLE_User")
+                .build();
+    }
+
+    public static JournalistApplications getMockJournalistApplications() {
+        return JournalistApplications.builder()
+                .id(2L)
+                .username("test")
+                .registrationToken("test")
+                .build();
+    }
+
+    public static JournalistApplicationDto getMockJournalistApplicationDto() {
+        return JournalistApplicationDto.builder()
+                .username("test")
+                .country("test")
+                .email("john@gmail.com")
+                .build();
+    }
+
+    public static RatingDto getMockRatingDto() {
+        return RatingDto.builder()
+                .biasedRating(2)
+                .writingQuality(2)
+                .truthfulness(2)
                 .build();
     }
 }

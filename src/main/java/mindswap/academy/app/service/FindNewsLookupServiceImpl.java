@@ -1,6 +1,7 @@
 package mindswap.academy.app.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.NewsFindDto;
 import mindswap.academy.app.commands.NewsJsonDto;
@@ -26,7 +27,9 @@ import java.util.concurrent.CompletableFuture;
 
 @Service
 @Slf4j
+@Setter
 public class FindNewsLookupServiceImpl implements FindNewsLookupService {
+
     @Autowired
     private NewsConverter newsConverter;
     @Autowired

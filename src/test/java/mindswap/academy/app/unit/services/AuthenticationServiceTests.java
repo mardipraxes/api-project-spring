@@ -1,10 +1,12 @@
 package mindswap.academy.app.unit.services;
 
 import mindswap.academy.app.MockData;
+import mindswap.academy.app.commands.JournalistApplicationDto;
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.converters.UserConverter;
 import mindswap.academy.app.exceptions.InvalidRequestException;
 import mindswap.academy.app.exceptions.UserAlreadyExistsException;
+import mindswap.academy.app.persistance.model.JournalistApplications;
 import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.repository.JournalistApplicationsRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
@@ -25,6 +27,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -107,7 +110,9 @@ public class AuthenticationServiceTests {
     public void testRegisterUserButEmailIsNotValid() {
         // Given
         RegistrationDto registrationDto = MockData.getMockRegistrationDto();
-        registrationDto.setEmail("john1996@gmail.com");
+        registrationDto.setEmail("john1996gmail.com");
+
+        //THEN
         assertThrows(InvalidRequestException.class, () -> authenticationService.registerUser(registrationDto));
 
     }
@@ -123,7 +128,39 @@ public class AuthenticationServiceTests {
        // Then
        assertEquals(1, authorities.size());
        assertInstanceOf(SimpleGrantedAuthority.class, authorities.iterator().next());
+       assertEquals("ROLE_User", authorities.iterator().next().getAuthority());
     }
 
+    @Test
+    public void testApplyJournalist() {
+        // Given
+        String expectedToken = "testToken";
+        JournalistApplicationDto journalistApplicationDto = MockData.getMockJournalistApplicationDto();
+        JournalistApplications journalistApplication = MockData.getMockJournalistApplications();
+        when(userRepo.findByUsername(any())).thenReturn(null);
+        when(userRepo.findByEmail(any())).thenReturn(null);
+        when(mHasher.getToken(any())).thenReturn(expectedToken);
+        // When
+        String token = authenticationService.applyJournalist(journalistApplicationDto);
 
+        // Then
+        verify(journalistApplicationsRepo).save(any());
+        assertEquals(expectedToken, token);
+
+    }
+
+    @Test
+    public void testApplyJournalistButUsernameExistsAlready() {
+        // Given
+        String expectedToken = "testToken";
+        JournalistApplicationDto journalistApplicationDto = MockData.getMockJournalistApplicationDto();
+        JournalistApplications journalistApplication = MockData.getMockJournalistApplications();
+        when(userRepo.findByUsername(any())).thenReturn(MockData.getMockUser());
+        // When
+
+
+        // Then
+        assertThrows(UserAlreadyExistsException.class, () -> authenticationService.applyJournalist(journalistApplicationDto));
+
+    }
 }
