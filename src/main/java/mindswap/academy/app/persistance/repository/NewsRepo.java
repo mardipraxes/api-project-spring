@@ -16,4 +16,6 @@ public interface NewsRepo extends JpaRepository<NewsPost, Long> {
    Collection<NewsPost> findByCategories(String category);
 
    Collection<NewsPost> findByJournalist(User user);
+
+   Optional<NewsPost> findByTitleURL(String title);
 }

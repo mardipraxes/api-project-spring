@@ -106,7 +106,7 @@ public class NewsServiceImpl implements NewsService {
 
         Long userId = userRepo.findByUsername(username).getId();
 
-        NewsPost newsPost = newsRepo.findByTitle(title).orElseThrow(NewsNotFoundException::new);
+        NewsPost newsPost = newsRepo.findByTitleURL(title).orElseThrow(NewsNotFoundException::new);
 
 
         // Object.equals() to prevent null pointer exceptions
@@ -214,5 +214,12 @@ public class NewsServiceImpl implements NewsService {
         NewsPost newsPost = newsRepo.findById(id).orElseThrow(NewsNotFoundException::new);
         newsRepo.delete(newsPost);
         log.info("Deleted news post with id: {}", id);
+    }
+
+    public NewsPostDto getNews(String title) {
+
+        NewsPost newsPost = newsRepo.findByTitleURL(title).orElseThrow(NewsNotFoundException::new);
+
+        return newsConverter.toDto(newsPost);
     }
 }

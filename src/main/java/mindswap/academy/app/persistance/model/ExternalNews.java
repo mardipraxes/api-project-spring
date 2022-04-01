@@ -41,4 +41,7 @@ public class ExternalNews {
 
     @OneToOne(cascade = CascadeType.ALL)
     private Rating rating;
+
+    @Column
+    private String titleURL;
 }

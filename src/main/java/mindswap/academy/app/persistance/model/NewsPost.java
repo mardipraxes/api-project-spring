@@ -46,4 +46,8 @@ public class NewsPost {
 
     @Column
     private String imageURL;
+
+    @Column
+    private String titleURL;
+
 }
