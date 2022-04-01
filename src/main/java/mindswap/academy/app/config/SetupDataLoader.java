@@ -30,11 +30,11 @@ public class SetupDataLoader {
     @EventListener(classes = {ContextStoppedEvent.class, ContextRefreshedEvent.class})
     public void onApplicationEvent() {
         log.info("Event received");
-        if (!loaded) {
+       if (!loaded) {
             log.info("Loading data...");
-            dataLoader.loadUserData();
-            dataLoader.loadNewsData();
-            loaded = true;
+          dataLoader.loadUserData();
+          dataLoader.loadNewsData();
+          loaded = true;
         }
     }
 }

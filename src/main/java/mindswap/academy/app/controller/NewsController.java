@@ -72,7 +72,7 @@ public class NewsController {
 
     }
 
-    @GetMapping("/findmynews/")
+    @GetMapping("/findmynews")
     private ResponseEntity<List<NewsPostDto>> getMyNews() {
 
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -83,7 +83,7 @@ public class NewsController {
 
     }
 
-    @PatchMapping("/edit/")
+    @PatchMapping("/edit")
     private ResponseEntity<?> editNews(@RequestBody EditNewsDto editNewsDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         newsService.editNews(username, editNewsDto);
