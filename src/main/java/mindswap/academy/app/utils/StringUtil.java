@@ -88,7 +88,6 @@ public class StringUtil {
         Matcher matcher = PASSWORD_REGEX.matcher(password);
         return matcher.matches();
     }
-//    @Deprecated
     public static boolean isValidEmail(String email) {
         Matcher matcher = EMAIL_REGEX.matcher(email);
         return matcher.matches();

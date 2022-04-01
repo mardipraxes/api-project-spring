@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.*;
 import mindswap.academy.app.persistance.model.Role;
@@ -40,16 +41,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserServiceImpl userServiceImpl;
+    private final UserServiceImpl userServiceImpl;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    private UserInfoService userInfoService;
+    private final UserInfoService userInfoService;
 
     @GetMapping("/users")
     private ResponseEntity<List<UserDto>> getAllUsers() {

@@ -1,5 +1,6 @@
 package mindswap.academy.app.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.NewsFindDto;
 import mindswap.academy.app.commands.NewsPostDto;
@@ -16,10 +17,10 @@ import java.util.concurrent.ExecutionException;
 @RestController
 @RequestMapping("/api")
 @Slf4j
+@RequiredArgsConstructor
 public class FindNewsController {
 
-    @Autowired
-    private FindNewsLookupServiceImpl findNewsLookupServiceImpl;
+    private final FindNewsLookupServiceImpl findNewsLookupServiceImpl;
 
     @GetMapping("/findnews")
     public ResponseEntity<List<NewsFindDto>> getFindNewsByParameters(

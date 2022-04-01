@@ -1,5 +1,6 @@
 package mindswap.academy.app.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.PasswordDto;
 import mindswap.academy.app.commands.RegistrationDto;
@@ -26,13 +27,13 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    @Autowired
-    private UserRepo userRepo;
 
-    @Autowired
-    private UserConverter userConverter;
+    private final UserRepo userRepo;
+
+    private final UserConverter userConverter;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

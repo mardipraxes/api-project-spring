@@ -1,5 +1,6 @@
 package mindswap.academy.app.service;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
@@ -26,22 +27,19 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
 
-    @Autowired
-    private NewsRepo newsRepo;
 
-    @Autowired
-    private NewsConverter newsConverter;
+    private final NewsRepo newsRepo;
 
-    @Autowired
-    private ExternalNewsRepo externalNewsRepo;
+    private final NewsConverter newsConverter;
 
-    @Autowired
-    private UserRepo userRepo;
+    private final ExternalNewsRepo externalNewsRepo;
 
-    @Autowired
-    private RatingTrackerRepo ratingTrackerRepo;
+    private final UserRepo userRepo;
+
+    private final RatingTrackerRepo ratingTrackerRepo;
 
 
 
@@ -58,7 +56,7 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsPostDto> findNews(String[] categories, String[] author) {
 
         List<NewsPost> newsPosts = new ArrayList<>();
-        if (verifyValidQuery(categories)) {
+        if (!verifyValidQuery(categories)) {
             log.warn("Invalid query");
             throw new InvalidQueryException();
         }
@@ -81,13 +79,13 @@ public class NewsServiceImpl implements NewsService {
 
             return sorted(newsPostsFilteredByAuthor)
                     .stream()
-                    .map(newsPost -> newsConverter.toDto(newsPost))
+                    .map(newsConverter::toDto)
                     .collect(Collectors.toList());
         }
 
         return sorted(newsPosts)
                 .stream()
-                .map(newsPost -> newsConverter.toDto(newsPost))
+                .map(newsConverter::toDto)
                 .collect(Collectors.toList());
     }
 

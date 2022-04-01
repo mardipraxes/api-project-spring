@@ -1,5 +1,6 @@
 package mindswap.academy.app.controller;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.EditNewsDto;
 import mindswap.academy.app.commands.NewsPostDto;
@@ -17,10 +18,10 @@ import java.util.List;
 @RestController
 @Slf4j
 @RequestMapping("/api/news")
+@RequiredArgsConstructor
 public class NewsController {
 
-    @Autowired
-    private NewsServiceImpl newsService;
+    private final NewsServiceImpl newsService;
 
     @PostMapping("/post")
     private ResponseEntity<?> postNews(@Valid @RequestBody NewsPostDto newsPostDto){

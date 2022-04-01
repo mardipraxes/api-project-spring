@@ -1,5 +1,6 @@
 package mindswap.academy.app.converters;
 
+import lombok.RequiredArgsConstructor;
 import mindswap.academy.app.commands.NewsFindDto;
 import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.persistance.model.*;
@@ -15,16 +16,16 @@ import java.util.Date;
 import java.util.List;
 
 @Component
+@RequiredArgsConstructor
 public class NewsConverter {
 
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private CategoryRepo categoryRepo;
+    private final CategoryRepo categoryRepo;
 
-    @Autowired
-    private RatingRepo ratingRepo;
+    private final RatingRepo ratingRepo;
+
+
 
     public NewsPostDto toDtoFromExternalNews(ExternalNews externalNews) {
 

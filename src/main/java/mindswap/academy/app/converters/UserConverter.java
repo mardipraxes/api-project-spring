@@ -1,5 +1,6 @@
 package mindswap.academy.app.converters;
 
+import lombok.RequiredArgsConstructor;
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.persistance.model.Journalist;
@@ -13,11 +14,10 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Component
+@RequiredArgsConstructor
 public class UserConverter {
 
-    @Autowired
-    private RoleRepo roleRepo;
-
+    private final RoleRepo roleRepo;
 
     public UserDto toDto(User user) {
         return UserDto.builder()
