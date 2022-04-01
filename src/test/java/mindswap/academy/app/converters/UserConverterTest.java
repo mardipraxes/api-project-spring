@@ -38,6 +38,7 @@ class UserConverterTest {
 
     @Test
     void testToDto() {
+        //GIVEN
         User user = new User();
         user.setCountry("GB");
         user.setEmail("jane.doe@example.org");
@@ -45,6 +46,7 @@ class UserConverterTest {
         user.setPassword("iloveyou");
         user.setRoles(new HashSet<>());
         user.setUsername("janedoe");
+        //THEN
         UserDto actualToDtoResult = this.userConverter.toDto(user);
         assertEquals("GB", actualToDtoResult.getCountry());
         assertEquals("janedoe", actualToDtoResult.getUsername());
@@ -54,7 +56,15 @@ class UserConverterTest {
 
     @Test
     void testToDto2() {
+        //GIVEN
         Journalist journalist = mock(Journalist.class);
+        journalist.setCountry("GB");
+        journalist.setEmail("jane.doe@example.org");
+        journalist.setId(123L);
+        journalist.setPassword("iloveyou");
+        journalist.setRoles(new HashSet<>());
+        journalist.setUsername("janedoe");
+        //THEN
         when(journalist.getCountry()).thenReturn("GB");
         when(journalist.getEmail()).thenReturn("jane.doe@example.org");
         when(journalist.getUsername()).thenReturn("janedoe");
@@ -64,12 +74,7 @@ class UserConverterTest {
         doNothing().when(journalist).setPassword((String) any());
         doNothing().when(journalist).setRoles((java.util.Set<Role>) any());
         doNothing().when(journalist).setUsername((String) any());
-        journalist.setCountry("GB");
-        journalist.setEmail("jane.doe@example.org");
-        journalist.setId(123L);
-        journalist.setPassword("iloveyou");
-        journalist.setRoles(new HashSet<>());
-        journalist.setUsername("janedoe");
+        //THEN
         UserDto actualToDtoResult = this.userConverter.toDto(journalist);
         assertEquals("GB", actualToDtoResult.getCountry());
         assertEquals("janedoe", actualToDtoResult.getUsername());
@@ -89,11 +94,14 @@ class UserConverterTest {
 
     @Test
     void testToEntityFromRegistrationDto() {
+        //GIVEN
         Role role = new Role();
         role.setId(123L);
         role.setName("Name");
         role.setUsers(new ArrayList<>());
+        //WHEN
         when(this.roleRepo.findByName((String) any())).thenReturn(role);
+        //THEN
         User actualToEntityFromRegistrationDtoResult = this.userConverter.toEntityFromRegistrationDto(
                 new RegistrationDto("janedoe", "iloveyou", "jane.doe@example.org", "iloveyou", "ABC123", "ABC123", "GB"),
                 "secret");
@@ -108,11 +116,14 @@ class UserConverterTest {
 
     @Test
     void testToEntityFromRegistrationDto2() {
+        //GIVEN
         Role role = new Role();
         role.setId(123L);
         role.setName("Name");
         role.setUsers(new ArrayList<>());
+        //WHEN
         when(this.roleRepo.findByName((String) any())).thenReturn(role);
+        //THEN
         User actualToEntityFromRegistrationDtoResult = this.userConverter.toEntityFromRegistrationDto(
                 new RegistrationDto("janedoe", "iloveyou", "jane.doe@example.org", "iloveyou", "ABC123", "abcde", "GB"),
                 "secret");

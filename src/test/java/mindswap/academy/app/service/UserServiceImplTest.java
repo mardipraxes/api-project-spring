@@ -1,4 +1,4 @@
-package mindswap.academy.app.service;
+/*package mindswap.academy.app.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -48,15 +48,18 @@ class UserServiceImplTest {
 
     @Test
     void testLoadUserByUsername() throws UsernameNotFoundException {
+        //GIVEN
         User user = new User();
         user.setCountry("GB");
         user.setEmail("jane.doe@example.org");
         user.setId(123L);
         user.setPassword("iloveyou");
         user.setRoles(new HashSet<>());
+        //WHEN
         user.setUsername("janedoe");
         when(this.userRepo.findByUsername((String) any())).thenReturn(user);
         UserDetails actualLoadUserByUsernameResult = this.userServiceImpl.loadUserByUsername("janedoe");
+        //THEN
         assertTrue(actualLoadUserByUsernameResult.getAuthorities().isEmpty());
         assertTrue(actualLoadUserByUsernameResult.isEnabled());
         assertTrue(actualLoadUserByUsernameResult.isCredentialsNonExpired());
@@ -69,7 +72,15 @@ class UserServiceImplTest {
 
     @Test
     void testLoadUserByUsername2() throws UsernameNotFoundException {
+        //GIVEN
         Journalist journalist = mock(Journalist.class);
+        journalist.setCountry("GB");
+        journalist.setEmail("jane.doe@example.org");
+        journalist.setId(123L);
+        journalist.setPassword("iloveyou");
+        journalist.setRoles(new HashSet<>());
+        journalist.setUsername("janedoe");
+        //WHEN
         when(journalist.getPassword()).thenReturn("iloveyou");
         when(journalist.getUsername()).thenReturn("janedoe");
         when(journalist.getRoles()).thenReturn(new HashSet<>());
@@ -79,13 +90,8 @@ class UserServiceImplTest {
         doNothing().when(journalist).setPassword((String) any());
         doNothing().when(journalist).setRoles((Set<Role>) any());
         doNothing().when(journalist).setUsername((String) any());
-        journalist.setCountry("GB");
-        journalist.setEmail("jane.doe@example.org");
-        journalist.setId(123L);
-        journalist.setPassword("iloveyou");
-        journalist.setRoles(new HashSet<>());
-        journalist.setUsername("janedoe");
         when(this.userRepo.findByUsername((String) any())).thenReturn(journalist);
+        //THEN
         UserDetails actualLoadUserByUsernameResult = this.userServiceImpl.loadUserByUsername("janedoe");
         assertTrue(actualLoadUserByUsernameResult.getAuthorities().isEmpty());
         assertTrue(actualLoadUserByUsernameResult.isEnabled());
@@ -134,12 +140,8 @@ class UserServiceImplTest {
         doNothing().when(journalist).setPassword((String) any());
         doNothing().when(journalist).setRoles((java.util.Set<Role>) any());
         doNothing().when(journalist).setUsername((String) any());
-        journalist.setCountry("GB");
-        journalist.setEmail("jane.doe@example.org");
-        journalist.setId(123L);
-        journalist.setPassword("iloveyou");
-        journalist.setRoles(new HashSet<>());
-        journalist.setUsername("janedoe");
+
+
         when(this.userRepo.findByUsername((String) any())).thenReturn(journalist);
         this.userServiceImpl.loadUserByUsername("janedoe");
     }
@@ -150,10 +152,18 @@ class UserServiceImplTest {
         role.setId(123L);
         role.setName("User {} is trying to log in..");
         role.setUsers(new ArrayList<>());
+        Journalist journalist = mock(Journalist.class);
 
+        //GIVEN
+        journalist.setCountry("GB");
+        journalist.setEmail("jane.doe@example.org");
+        journalist.setId(123L);
+        journalist.setPassword("iloveyou");
+        journalist.setRoles(new HashSet<>());
+        journalist.setUsername("janedoe");
         HashSet<Role> roleSet = new HashSet<>();
         roleSet.add(role);
-        Journalist journalist = mock(Journalist.class);
+        //WHEN
         when(journalist.getPassword()).thenReturn("iloveyou");
         when(journalist.getUsername()).thenReturn("janedoe");
         when(journalist.getRoles()).thenReturn(roleSet);
@@ -163,13 +173,9 @@ class UserServiceImplTest {
         doNothing().when(journalist).setPassword((String) any());
         doNothing().when(journalist).setRoles((Set<Role>) any());
         doNothing().when(journalist).setUsername((String) any());
-        journalist.setCountry("GB");
-        journalist.setEmail("jane.doe@example.org");
-        journalist.setId(123L);
-        journalist.setPassword("iloveyou");
-        journalist.setRoles(new HashSet<>());
-        journalist.setUsername("janedoe");
         when(this.userRepo.findByUsername((String) any())).thenReturn(journalist);
+
+        //THEN
         UserDetails actualLoadUserByUsernameResult = this.userServiceImpl.loadUserByUsername("janedoe");
         assertEquals(1, actualLoadUserByUsernameResult.getAuthorities().size());
         assertTrue(actualLoadUserByUsernameResult.isEnabled());
@@ -192,7 +198,9 @@ class UserServiceImplTest {
 
     @Test
     void testGetAllUsers() {
+        //WHEN
         when(this.userRepo.findAll()).thenReturn(new ArrayList<>());
+        //THEN
         assertTrue(this.userServiceImpl.getAllUsers().isEmpty());
         verify(this.userRepo).findAll();
     }
@@ -236,6 +244,7 @@ class UserServiceImplTest {
 
     @Test
     void testGetUserById() {
+        //GIVEN
         User user = new User();
         user.setCountry("GB");
         user.setEmail("jane.doe@example.org");
@@ -244,10 +253,11 @@ class UserServiceImplTest {
         user.setRoles(new HashSet<>());
         user.setUsername("janedoe");
         Optional<User> ofResult = Optional.of(user);
+        //WHEN
         when(this.userRepo.findById((Long) any())).thenReturn(ofResult);
         UserDto userDto = new UserDto("janedoe", "jane.doe@example.org", "GB", "Type");
-
         when(this.userConverter.toDto((User) any())).thenReturn(userDto);
+        //THEN
         assertSame(userDto, this.userServiceImpl.getUserById(123L));
         verify(this.userRepo).findById((Long) any());
         verify(this.userConverter).toDto((User) any());
@@ -293,6 +303,7 @@ class UserServiceImplTest {
 
     @Test
     void testGetUserById4() {
+        //GIVEN
         User user = new User();
         user.setCountry("GB");
         user.setEmail("jane.doe@example.org");
@@ -301,9 +312,11 @@ class UserServiceImplTest {
         user.setRoles(new HashSet<>());
         user.setUsername("janedoe");
         Optional<User> ofResult = Optional.of(user);
+        //WHEN
         when(this.userRepo.findById((Long) any())).thenReturn(ofResult);
         when(this.userConverter.toDto((User) any()))
                 .thenReturn(new UserDto("janedoe", "jane.doe@example.org", "GB", "Type"));
+        //THEN
         assertThrows(InvalidRequestException.class, () -> this.userServiceImpl.getUserById(0L));
     }
 
@@ -324,5 +337,5 @@ class UserServiceImplTest {
 
         this.userServiceImpl.getCurrentUser();
     }
-}
+}*/
 

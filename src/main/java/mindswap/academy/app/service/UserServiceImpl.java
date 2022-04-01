@@ -1,12 +1,12 @@
 package mindswap.academy.app.service;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import mindswap.academy.app.commands.PasswordDto;
-import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.converters.UserConverter;
 import mindswap.academy.app.exceptions.InvalidRequestException;
-import mindswap.academy.app.exceptions.UserAlreadyExistsException;
 import mindswap.academy.app.exceptions.UserNotFoundException;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.UserRepo;
@@ -16,23 +16,25 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService, UserDetailsService {
 
-    @Autowired
-    private UserRepo userRepo;
 
-    @Autowired
-    private UserConverter userConverter;
+    private final UserRepo userRepo;
+
+    private final UserConverter userConverter;
+
+
+
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
