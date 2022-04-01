@@ -1,5 +1,7 @@
 package mindswap.academy.app.service;
 
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.NewsFindDto;
@@ -29,9 +31,10 @@ import java.util.concurrent.CompletableFuture;
 @RequiredArgsConstructor
 public class FindNewsLookupServiceImpl implements FindNewsLookupService {
 
-    private final NewsConverter newsConverter;
-
-    private final ExternalNewsRepo externalNewsRepo;
+    @Autowired
+    private NewsConverter newsConverter;
+    @Autowired
+    private ExternalNewsRepo externalNewsRepo;
 
     private static final String FINDNEWS_URL =
             "http://api.mediastack.com/v1/news?access_key=f5aa023260fd566807064a40468feb59&language=%s&categories=%s&countries=%s&offset=0&limit=25";
