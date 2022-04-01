@@ -1,6 +1,7 @@
 package mindswap.academy.app.service;
 
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.JournalistApplicationDto;
 import mindswap.academy.app.commands.RegistrationDto;
@@ -28,22 +29,19 @@ import java.util.Set;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class AuthenticationService {
 
-    @Autowired
-    private UserRepo userRepo;
+    private final UserRepo userRepo;
 
-    @Autowired
-    private UserConverter userConverter;
+    private final UserConverter userConverter;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JournalistApplicationsRepo journalistApplicationsRepo;
+    private final JournalistApplicationsRepo journalistApplicationsRepo;
 
-    @Autowired
-    private MHasher mHasher;
+
+    private final MHasher mHasher;
 
     public void registerUser(RegistrationDto registrationDto) {
 

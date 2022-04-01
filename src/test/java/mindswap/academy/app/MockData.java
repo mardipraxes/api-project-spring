@@ -1,8 +1,11 @@
 package mindswap.academy.app;
 
 import mindswap.academy.app.commands.NewsPostDto;
+import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.persistance.model.*;
+
+import java.util.List;
 
 public class MockData {
 
@@ -22,6 +25,8 @@ public class MockData {
         return NewsPost.builder()
                 .title("test")
                 .content("test")
+                .journalist(getMockJournalist())
+                .categories(List.of(getMockCategory()))
                 .id(2L)
                 .build();
     }
@@ -42,14 +47,14 @@ public class MockData {
     }
 
     public static Journalist getMockJournalist() {
-        return (Journalist) User.builder()
-                .username("test")
-                .password("test")
-                .email("journalis@journalist.com")
-                .country("test")
-                .id(2L)
-                .roles(null)
-                .build();
+        Journalist journalist = new Journalist();
+        journalist.setId(2L);
+        journalist.setUsername("test");
+        journalist.setPassword("test");
+        journalist.setEmail("john@journalist@email.com");
+        journalist.setCountry("test");
+        return journalist;
+
     }
 
     public static Category getMockCategory() {
@@ -66,6 +71,16 @@ public class MockData {
                 .truthfulness(2)
                 .counter(0)
                 .id(2L)
+                .build();
+    }
+
+    public static RegistrationDto getMockRegistrationDto() {
+        return RegistrationDto.builder()
+                .username("test")
+                .password("test")
+                .email("test@test.com")
+                .confirmPassword("test")
+                .country("test")
                 .build();
     }
 

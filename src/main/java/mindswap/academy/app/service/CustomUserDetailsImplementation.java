@@ -1,6 +1,7 @@
 package mindswap.academy.app.service;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.Collection;
 
 @AllArgsConstructor
+@RequiredArgsConstructor
 public class CustomUserDetailsImplementation implements UserDetails {
-
 
     private User user;
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
 
     @Override
