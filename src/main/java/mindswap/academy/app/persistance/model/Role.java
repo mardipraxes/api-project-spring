@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "roles")
+@Table(name = "roles_api")
 @NoArgsConstructor
 public class Role {
 

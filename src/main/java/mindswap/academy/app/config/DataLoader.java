@@ -8,13 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Transient;
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
-import java.util.List;
 import java.util.stream.IntStream;
 
 @Component
-public class UserDataLoader {
+public class DataLoader {
 
     @Autowired
     private UserRepo userRepo;
@@ -30,42 +29,8 @@ public class UserDataLoader {
     private CategoryRepo categoryRepo;
 
 
-    public void loadData() {
+    public void loadUserData() {
         String[] names = StringUtil.getNamesArray();
-
-        Role roleAdmin = new Role("ROLE_Admin");
-        Role roleJournalist = new Role("ROLE_Journalist");
-        Role roleUser = new Role("ROLE_User");
-
-        Category category = Category.builder()
-                .newsPost(null)
-                .description("Russia")
-                .name("Russia")
-                .build();
-
-        createCategoryIfNotFound(category);
-
-        Rating rating = Rating.builder()
-                .truthfulness(1)
-                .biasedRating(1)
-                .writingQuality(1)
-                .build();
-
-        createRatingIfNotFound(rating);
-        NewsPost newsPost = NewsPost.builder()
-                .categories(new HashSet<>(categoryRepo.findAll()))
-                .content("Russia killed levensky")
-                .title("Russia killed levensky")
-                .build();
-
-
-
-        createNewsIfNotFound(newsPost);
-
-        createRoleIfNotFound(roleAdmin);
-        createRoleIfNotFound(roleJournalist);
-        createRoleIfNotFound(roleUser);
-
 
         IntStream.range(0, 15).forEach(i -> {
            User user = User.builder()
@@ -74,34 +39,66 @@ public class UserDataLoader {
                     .password(passwordEncoder.encode("123456"))
                     .country("USA").build();
 
-           user.setRoles(new HashSet<>());
-           user.getRoles().add(roleRepo.findByName(roleUser.getName()));
+//           user.setRoles(new HashSet<>());
+//           user.getRoles().add(roleRepo.findByName(roleUser.getName()));
            userRepo.save(user);
         });
 
         IntStream.range(16, 20).forEach(i -> {
             Journalist journalist = new Journalist();
             journalist.setUsername(names[i].toLowerCase() + ((int) (Math.random() * 100)));
-            journalist.setEmail(names[i].concat(String.valueOf((int) (Math.random() * 40) + 1960)).toLowerCase() + "@gmail.com");
+            journalist.setEmail(names[i].concat(String.valueOf((int) (Math.random() * 40) + 1960)).toLowerCase() + "@journalist.com");
             journalist.setPassword("123456");
             journalist.setCountry("USA");
-            journalist.setNewsPosts(new HashSet<>());
-            journalist.getNewsPosts().add(newsRepo.findByTitle("Russia killed levensky").get());
-            journalist.setRoles(new HashSet<>());
-            journalist.getRoles().add(roleRepo.findByName(roleJournalist.getName()));
+//            journalist.setNewsPosts(new HashSet<>());
+//            journalist.getNewsPosts().add(newsRepo.findByTitle("Russia killed levensky").get());
+//            journalist.setRoles(new HashSet<>());
+//            journalist.getRoles().add(roleRepo.findByName(roleJournalist.getName()));
             userRepo.save(journalist);
         });
 
-        List<Journalist> journalists = new ArrayList<>();
-        for(User user : userRepo.findAll()) {
-            if(user instanceof Journalist) {
-                journalists.add((Journalist) user);
-            }
-        }
+        Role roleAdmin = new Role("ROLE_Admin");
+        Role roleJournalist = new Role("ROLE_Journalist");
+        Role roleUser = new Role("ROLE_User");
 
-        Rating rating1 = ratingRepo.findById(1L).get();
-        rating1.setNews(newsRepo.findById(1L).get());
-        ratingRepo.save(rating1);
+        createRoleIfNotFound(roleAdmin);
+        createRoleIfNotFound(roleJournalist);
+        createRoleIfNotFound(roleUser);
+
+        userRepo.findAll().forEach(user -> {
+            user.setRoles(new HashSet<>());
+            if(user instanceof Journalist) {
+                user.getRoles().add(roleJournalist);
+                user.getRoles().add(roleUser);
+                userRepo.save(user);
+            } else {
+                user.getRoles().add(roleRepo.findByName(roleUser.getName()));
+                userRepo.save(user);
+            }
+
+        });
+
+    }
+
+
+    public void loadNewsData() {
+        String[] titles = StringUtil.getNewsTitlesArray();
+        String[] content = StringUtil.getNewsContentArray();
+
+        IntStream.range(0, 4).forEach(i -> {
+            NewsPost news = NewsPost.builder()
+                    .title(titles[i])
+                    .content(content[i])
+                    .titleURL(titles[i].replaceAll(" ", "_").toLowerCase().toLowerCase())
+                    .publishedDate(new Date())
+                    .imageURL("https://picsum.photos/200/300?image=".concat(String.valueOf(i)))
+                    .build();
+
+            createNewsIfNotFound(news);
+        });
+
+        String [] categories = StringUtil.getCategoriesArray();
+
 
     }
 

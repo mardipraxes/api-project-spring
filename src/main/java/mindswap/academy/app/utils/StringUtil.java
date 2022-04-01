@@ -54,6 +54,34 @@ public class StringUtil {
             "Lauren\n" +
             "Amber";
 
+    public static String news_titles = "The New York Times\n" +
+            "The Washington Post\n" +
+            "The Wall Street Journal\n" +
+            "The Washington Times\n";
+
+    public static String news_content = "The New York Times\n" +
+            "The Washington Post\n" +
+            "The Wall Street Journal\n" +
+            "The Washington Times\n";
+
+    public static String news_categories = "Russain\n" +
+            "Business\n" +
+            "Technology\n" +
+            "Sports\n" +
+            "Entertainment\n" +
+            "Science\n" +
+            "Health\n" +
+            "Politics\n" +
+            "World\n";
+
+    public static String[] getNewsTitlesArray(){
+        return news_titles.split("\n");
+    }
+
+    public static String[] getNewsContentArray(){
+        return news_content.split("\n");
+    }
+
 
     public static boolean isValidPassword(String password) {
         return PASSWORD_REGEX.matcher(password).matches();
@@ -66,5 +94,9 @@ public class StringUtil {
 
     public static String[] getNamesArray(){
         return names.split("\n");
+    }
+
+    public static String[] getCategoriesArray() {
+        return news_categories.split("\n");
     }
 }

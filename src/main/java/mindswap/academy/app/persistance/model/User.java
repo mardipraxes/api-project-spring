@@ -11,7 +11,7 @@ import java.util.Set;
 @Getter
 @Builder
 @AllArgsConstructor
-@Table(name = "users")
+@Table(name = "users_api")
 @NoArgsConstructor
 @DiscriminatorColumn(name="user_type", discriminatorType = DiscriminatorType.STRING)
 public class User {
