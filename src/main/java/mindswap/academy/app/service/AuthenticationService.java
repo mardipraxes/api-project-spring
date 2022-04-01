@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import mindswap.academy.app.commands.JournalistApplicationDto;
 import mindswap.academy.app.commands.RegistrationDto;
 import mindswap.academy.app.converters.UserConverter;
+import mindswap.academy.app.exceptions.InvalidRequestException;
 import mindswap.academy.app.exceptions.UserAlreadyExistsException;
 import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.JournalistApplications;
@@ -12,6 +13,7 @@ import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.repository.JournalistApplicationsRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
 import mindswap.academy.app.utils.MHasher;
+import mindswap.academy.app.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,6 +46,16 @@ public class AuthenticationService {
     private MHasher mHasher;
 
     public void registerUser(RegistrationDto registrationDto) {
+
+        if(!StringUtil.isValidPassword(registrationDto.getPassword())) {
+            log.warn("Password is not strong enough or it's invalid");
+            throw new InvalidRequestException("Password is not strong enough or it's invalid");
+        }
+
+        if(!StringUtil.isValidEmail(registrationDto.getEmail())) {
+            log.warn("Email is not valid");
+            throw new InvalidRequestException("Email is not valid");
+        }
 
         if(userRepo.findByUsername(registrationDto.getUsername()) != null) {
             log.warn("User {} already exists", registrationDto.getUsername());

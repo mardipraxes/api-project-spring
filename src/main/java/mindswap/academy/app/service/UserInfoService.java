@@ -8,6 +8,7 @@ import mindswap.academy.app.exceptions.InvalidRequestException;
 import mindswap.academy.app.exceptions.UserNotFoundException;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.UserRepo;
+import mindswap.academy.app.utils.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -26,7 +27,14 @@ public class UserInfoService implements UserService {
 
     public void changePassword(PasswordDto passwordDto) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+
+        if(!StringUtil.isValidPassword(passwordDto.getNewPassword())){
+            log.warn("Invalid password");
+            throw new InvalidRequestException("Invalid password");
+        }
+
         log.info("User {} is trying to change his password", username);
+
         User user = userRepo.findByUsername(username);
         if (user == null) {
             log.warn("User {} not found", username);
@@ -69,6 +77,12 @@ public class UserInfoService implements UserService {
     }
 
     public void changeEmail(EmailDto emailDto) {
+
+        if(!StringUtil.isValidEmail(emailDto.getNewEmail())){
+            log.warn("Invalid email");
+            throw new InvalidRequestException("Invalid email");
+        }
+
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         log.info("User {} is trying to change his email", username);
         User user = userRepo.findByUsername(username);

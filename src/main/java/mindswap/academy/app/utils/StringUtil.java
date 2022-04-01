@@ -1,6 +1,14 @@
 package mindswap.academy.app.utils;
 
+import java.util.regex.Pattern;
+
 public class StringUtil {
+
+    private static final Pattern PASSWORD_REGEX =
+            Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{6,20}$");
+
+    private static final Pattern EMAIL_REGEX =
+            Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
 
     public static final String names = "Michael\n" +
             "Christopher\n" +
@@ -45,6 +53,15 @@ public class StringUtil {
             "Laura\n" +
             "Lauren\n" +
             "Amber";
+
+
+    public static boolean isValidPassword(String password) {
+        return PASSWORD_REGEX.matcher(password).matches();
+    }
+
+    public static boolean isValidEmail(String email) {
+        return EMAIL_REGEX.matcher(email).matches();
+    }
 
 
     public static String[] getNamesArray(){
