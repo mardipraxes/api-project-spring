@@ -9,7 +9,8 @@ public class StringUtil {
             Pattern.compile("^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&\\-+=()])(?=\\S+$).{6,20}$");
 
     private static final Pattern EMAIL_REGEX =
-            Pattern.compile("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$");
+            Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+
 
     public static final String names = "Michael\n" +
             "Christopher\n" +

@@ -77,7 +77,7 @@ public class MockData {
     public static RegistrationDto getMockRegistrationDto() {
         return RegistrationDto.builder()
                 .username("test")
-                .password("test")
+                .password("test123!A")
                 .email("test@test.com")
                 .confirmPassword("test")
                 .country("test")
@@ -85,4 +85,9 @@ public class MockData {
     }
 
 
+    public static Role getMockRole() {
+        return Role.builder()
+                .name("ROLE_User")
+                .build();
+    }
 }
