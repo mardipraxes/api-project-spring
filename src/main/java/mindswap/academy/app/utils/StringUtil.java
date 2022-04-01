@@ -64,7 +64,7 @@ public class StringUtil {
             "The Wall Street Journal\n" +
             "The Washington Times\n";
 
-    public static String news_categories = "Russain\n" +
+    public static String news_categories = "Russia\n" +
             "Business\n" +
             "Technology\n" +
             "Sports\n" +

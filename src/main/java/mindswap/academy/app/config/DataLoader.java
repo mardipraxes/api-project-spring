@@ -99,6 +99,35 @@ public class DataLoader {
 
         String [] categories = StringUtil.getCategoriesArray();
 
+        IntStream.range(0, 4).forEach(i -> {
+            Category category = Category.builder()
+                    .name(categories[i])
+                    .build();
+            categoryRepo.save(category);
+        });
+
+        Rating rating = Rating.builder()
+                .biasedRating(1)
+                .counter(0)
+                .truthfulness(1)
+                .writingQuality(1)
+                .build();
+
+        ratingRepo.save(rating);
+
+        Journalist journalist = (Journalist) userRepo.findAll().stream().filter(user -> user instanceof Journalist).findFirst().get();
+
+        newsRepo.findAll().forEach(newsPost -> {
+            newsPost.setJournalist(journalist);
+            newsPost.setRating(rating);
+            newsPost.setCategories(new HashSet<>());
+            newsPost.getCategories().add(categoryRepo.findByName(categories[(int) (Math.random() * 4)]));
+            newsRepo.save(newsPost);
+        });
+
+
+
+
 
     }
 
