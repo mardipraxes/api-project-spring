@@ -1,5 +1,6 @@
 package mindswap.academy.app.commands;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
 import java.util.Date;
@@ -15,6 +16,7 @@ public class NewsFindDto {
     private String title;
     private String description;
     private String author;
+    @JsonProperty("published_at")
     private Date publishedAt;
     private String url;
     private String image;

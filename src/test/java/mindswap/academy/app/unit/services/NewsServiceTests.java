@@ -45,13 +45,16 @@ public class NewsServiceTests {
     private RatingTrackerRepo ratingTrackerRepo;
 
     @Mock
+    private CategoryRepo categoryRepo;
+
+    @Mock
     private Authentication authentication;
 
     private NewsServiceImpl newsServiceTest;
 
     @BeforeEach
     public void init() {
-        newsServiceTest = new NewsServiceImpl(newsRepo, newsConverter, externalNewsRepo, userRepo, ratingTrackerRepo);
+        newsServiceTest = new NewsServiceImpl(newsRepo, newsConverter, externalNewsRepo, userRepo, ratingTrackerRepo ,categoryRepo);
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 

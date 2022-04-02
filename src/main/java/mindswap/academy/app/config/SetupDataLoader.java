@@ -33,7 +33,7 @@ public class SetupDataLoader {
        if (!loaded) {
             log.info("Loading data...");
           dataLoader.loadUserData();
-          dataLoader.loadNewsData();
+           dataLoader.loadNewsData();
           loaded = true;
         }
     }

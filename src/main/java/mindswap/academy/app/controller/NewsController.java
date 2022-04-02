@@ -33,11 +33,11 @@ public class NewsController {
 
     @GetMapping("/search")
     private ResponseEntity<?> getNews(@RequestParam(value = "categories",defaultValue = "[]") String[] categories,
-                                      @RequestParam(value = "author",defaultValue = "[]") String[] author) {
+                                      @RequestParam(value = "author",defaultValue ="[]") String[] author) {
 
         List<NewsPostDto> foundNews = newsService.findNews(categories, author);
 
-        return ResponseEntity.ok().body(newsService.findNews(categories, author));
+        return ResponseEntity.ok().body(foundNews);
 
     }
 

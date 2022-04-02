@@ -41,7 +41,7 @@ public class NewsPost {
     private Date publishedDate;
 
 
-    @OneToOne(mappedBy = "news", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "news", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Rating rating;
 
     @Column

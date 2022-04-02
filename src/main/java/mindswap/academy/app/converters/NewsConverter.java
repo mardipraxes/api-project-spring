@@ -33,6 +33,7 @@ public class NewsConverter {
                 .builder()
                 .title(externalNews.getTitle())
                 .content(externalNews.getDescription())
+                .date(externalNews.getPublishedAt())
                 .imageURL(externalNews.getUrlToImage())
                 .build();
 
@@ -87,6 +88,7 @@ public class NewsConverter {
                 .title(newsPost.getTitle())
                 .content(newsPost.getContent())
                 .imageURL(newsPost.getImageURL())
+                .author(newsPost.getJournalist().getUsername())
                 .build();
 
         newsPostDto.setCategories(newsPost.getCategories().stream().map(Category::getName).toArray(String[]::new));
@@ -116,9 +118,11 @@ public class NewsConverter {
                     .name(newsFindDto.getCategory())
                     .description(newsFindDto.getCategory())
                     .build();
+
             categoryRepo.save(category);
-            externalNews.setCategory(category);
         }
+
+        externalNews.setCategory(categoryRepo.findByName(newsFindDto.getCategory()));
 
         Rating rating = Rating.builder()
                 .biasedRating(0)

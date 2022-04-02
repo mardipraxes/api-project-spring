@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.Date;
 
 @Getter
 @Setter
@@ -21,6 +22,8 @@ public class NewsPostDto {
     private String author;
     @NotNull
     private String[] categories;
+
+    private Date date;
 
     private String imageURL;
 
