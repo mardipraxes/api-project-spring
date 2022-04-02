@@ -37,7 +37,7 @@ public class NewsController {
 
         List<NewsPostDto> foundNews = newsService.findNews(categories, author);
 
-        return ResponseEntity.ok().body(newsService.findNews(categories, author));
+        return ResponseEntity.ok().body(foundNews);
 
     }
 
