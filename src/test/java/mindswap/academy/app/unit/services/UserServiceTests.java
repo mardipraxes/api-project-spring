@@ -2,9 +2,11 @@ package mindswap.academy.app.unit.services;
 
 import mindswap.academy.app.MockData;
 import mindswap.academy.app.commands.NewsPostDto;
+import mindswap.academy.app.commands.PasswordDto;
 import mindswap.academy.app.commands.UserDto;
 import mindswap.academy.app.converters.NewsConverter;
 import mindswap.academy.app.converters.UserConverter;
+import mindswap.academy.app.exceptions.UserNotFoundException;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
 import mindswap.academy.app.persistance.repository.NewsRepo;
@@ -17,11 +19,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,6 +38,11 @@ public class UserServiceTests {
     private UserRepo userRepo;
     @Mock
     private UserConverter userConverter;
+    @Mock
+    private SecurityContextHolder securityContextHolder;
+
+    @Mock
+    private Authentication authentication;
 
 
     private UserServiceImpl userServiceTests;
@@ -38,6 +50,7 @@ public class UserServiceTests {
     @BeforeEach
     public void init() {
         this.userServiceTests = new UserServiceImpl(userRepo, userConverter);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
     }
 
     @Test
@@ -55,13 +68,66 @@ public class UserServiceTests {
         //Then
         assertEquals(userDtoListReturned.size(), userList.size());
         assertEquals(userDtoListReturned.get(0).getUsername(), userList.get(0).getUsername());
-
-
     }
 
+    @Test
+    public void testGetUserById() {
 
+        //Given
+        Long id = 1L;
+        User user = MockData.getMockUser();
+        UserDto userDto = MockData.getMockUserDto();
+        when(userRepo.findById(id)).thenReturn(Optional.of(user));
+        when(userConverter.toDto(user)).thenReturn(userDto);
+        //When
+        UserDto userDtoReturned = userServiceTests.getUserById(id);
+        //Then
+        assertEquals(userDto.getUsername(), userDtoReturned.getUsername());
+        assertEquals(user.getUsername(), userDtoReturned.getUsername());
+    }
+    @Test
+    public void testGetUserByIdButUserIsNotFound() {
 
+        //Given
+        Long id = 1L;
+        User user = MockData.getMockUser();
+        UserDto userDto = MockData.getMockUserDto();
+        when(userRepo.findById(id)).thenReturn(Optional.empty());
+        //When
+        //Then
+        assertThrows(UserNotFoundException.class, () -> userServiceTests.getUserById(id));
+    }
 
+    @Test
+    public void testGetUserByUsername() {
+        //Given
+        String username = "joao";
+        User user = MockData.getMockUser();
+        UserDto userDto = MockData.getMockUserDto();
+        //WHEN
+        when(userRepo.findByUsername(username)).thenReturn(user);
+        User userDtoReturned = userServiceTests.getUserByUsername(username);
+        //THEN
+        assertEquals(userDto.getUsername(), userDtoReturned.getUsername());
+        assertEquals(user.getUsername(), userDtoReturned.getUsername());
+    }
+    @Test
+    public void getCurrentUser() {
+        //Given
+        String username = "joao";
+        User user = MockData.getMockUser();
+        UserDto userDto = MockData.getMockUserDto();
+        PasswordDto passwordDto = MockData.getMockPasswordDto();
+        //WHEN
+        when(SecurityContextHolder.getContext().getAuthentication().getName()).thenReturn("joao");
+        when(userRepo.findByUsername(username)).thenReturn(user);
+        when(userConverter.toDto(user)).thenReturn(userDto);
+        //THEN
+        UserDto userDtoReturned = userServiceTests.getCurrentUser();
+        assertEquals(userDto.getUsername(), userDtoReturned.getUsername());
+        assertEquals(user.getUsername(), userDtoReturned.getUsername());
+
+    }
 
 
 

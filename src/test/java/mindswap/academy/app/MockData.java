@@ -1,8 +1,6 @@
 package mindswap.academy.app;
 
-import mindswap.academy.app.commands.NewsPostDto;
-import mindswap.academy.app.commands.RegistrationDto;
-import mindswap.academy.app.commands.UserDto;
+import mindswap.academy.app.commands.*;
 import mindswap.academy.app.persistance.model.*;
 
 import java.util.List;
@@ -84,5 +82,26 @@ public class MockData {
                 .build();
     }
 
+    public static PasswordDto getMockPasswordDto() {
+        return PasswordDto.builder()
+                .oldPassword("test")
+                .newPassword("test123A!")
+                .confirmPassword("test1")
+                .build();
+    }
+    public static CountryDto getMockCountryDto() {
+        return CountryDto.builder()
+                .password("test")
+                .newCountry("Portugal")
+                .build();
+    }
+
+    public static EmailDto getMockEmailDto() {
+        return EmailDto.builder()
+                .password("test")
+                .email("joao123@hotmail.com")
+                .newEmail("joao@hotmail.com")
+                .build();
+    }
 
 }
