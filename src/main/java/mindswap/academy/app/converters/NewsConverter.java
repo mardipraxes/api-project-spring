@@ -32,6 +32,7 @@ public class NewsConverter {
         NewsPostDto newsPostDto = NewsPostDto
                 .builder()
                 .title(externalNews.getTitle())
+                .publishedDate(externalNews.getPublishedAt())
                 .content(externalNews.getDescription())
                 .imageURL(externalNews.getUrlToImage())
                 .build();
@@ -84,6 +85,7 @@ public class NewsConverter {
 
         NewsPostDto newsPostDto = NewsPostDto
                 .builder()
+                .publishedDate(newsPost.getPublishedDate())
                 .title(newsPost.getTitle())
                 .content(newsPost.getContent())
                 .imageURL(newsPost.getImageURL())

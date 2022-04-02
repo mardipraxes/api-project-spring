@@ -7,14 +7,8 @@ import mindswap.academy.app.commands.NewsPostDto;
 import mindswap.academy.app.commands.RatingDto;
 import mindswap.academy.app.converters.NewsConverter;
 import mindswap.academy.app.exceptions.*;
-import mindswap.academy.app.persistance.model.ExternalNews;
-import mindswap.academy.app.persistance.model.Journalist;
-import mindswap.academy.app.persistance.model.NewsPost;
-import mindswap.academy.app.persistance.model.User;
-import mindswap.academy.app.persistance.repository.ExternalNewsRepo;
-import mindswap.academy.app.persistance.repository.NewsRepo;
-import mindswap.academy.app.persistance.repository.RatingTrackerRepo;
-import mindswap.academy.app.persistance.repository.UserRepo;
+import mindswap.academy.app.persistance.model.*;
+import mindswap.academy.app.persistance.repository.*;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +34,8 @@ public class NewsServiceImpl implements NewsService {
 
     private final RatingTrackerRepo ratingTrackerRepo;
 
+    private final CategoryRepo categoryRepo;
+
 
 
     public void postNews(NewsPostDto newsPostDto) {
@@ -60,9 +56,12 @@ public class NewsServiceImpl implements NewsService {
             throw new InvalidQueryException();
         }
 
-        Arrays.stream(categories).forEach(category -> newsPosts.addAll(newsRepo.findByCategories(category)));
+        Arrays.stream(categories)
+                .map(categoryRepo::findByName)
+                .forEach(category -> newsPosts.addAll(category.getNewsPost()));
+
         List<NewsPost> newsPostsFilteredByAuthor = new ArrayList<>();
-        if (author != null) {
+        if (!author[0].equals("[]")) {
             newsPosts.stream()
                     .filter(newsPost ->
                             Arrays.stream(author)
@@ -123,6 +122,12 @@ public class NewsServiceImpl implements NewsService {
         newsPost.getRating().setWritingQuality(newsPost.getRating().getWritingQuality() + ratingDto.getWritingQuality());
         newsPost.getRating().setTruthfulness(newsPost.getRating().getTruthfulness() + ratingDto.getTruthfulness());
         log.info("Added rating to news post with title: {}", newsPost.getTitle());
+        RatingTracker ratingTracker = RatingTracker.builder()
+                .newsId(newsPost.getId())
+                .userId(userId)
+                .build();
+
+        ratingTrackerRepo.save(ratingTracker);
         newsRepo.save(newsPost);
     }
 
@@ -139,10 +144,10 @@ public class NewsServiceImpl implements NewsService {
 
 
         Arrays.stream(categories).forEach(category ->
-                newsPosts.addAll(newsRepo.findByCategories(category)));
+                newsPosts.addAll(newsRepo.findByCategories(categoryRepo.findByName(category))));
 
         Arrays.stream(categories).forEach(category ->
-                externalNewsList.addAll(externalNewsRepo.findByCategory(category)));
+                externalNewsList.addAll(externalNewsRepo.findByCategory(categoryRepo.findByName(category))));
 
         newsPosts.stream().map(newsConverter::toDto).forEach(newsPostDtoList::add);
         externalNewsList.stream().map(newsConverter::toDtoFromExternalNews).forEach(newsPostDtoList::add);
