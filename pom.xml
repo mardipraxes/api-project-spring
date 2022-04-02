@@ -14,7 +14,7 @@
 	<name>news-api-v01</name>
 	<description>A news api for independent journalists</description>
 	<properties>
-		<java.version>17</java.version>
+		<java.version>17.0.2</java.version>
 	</properties>
 	<dependencies>
 		<dependency>
