@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RatingTrackerRepo extends JpaRepository<RatingTracker, Long> {
 
-    RatingTracker getByUserId(Long userId);
+    RatingTracker findByUserId(Long userId);
 }

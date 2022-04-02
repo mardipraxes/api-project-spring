@@ -40,7 +40,6 @@ public class AuthenticationService {
 
     private final JournalistApplicationsRepo journalistApplicationsRepo;
 
-
     private final MHasher mHasher;
 
     public void registerUser(RegistrationDto registrationDto) {
