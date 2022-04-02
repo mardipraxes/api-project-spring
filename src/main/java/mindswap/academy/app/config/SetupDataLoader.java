@@ -32,8 +32,8 @@ public class SetupDataLoader {
         log.info("Event received");
        if (!loaded) {
             log.info("Loading data...");
-//          dataLoader.loadUserData();
-//          dataLoader.loadNewsData();
+          dataLoader.loadUserData();
+          dataLoader.loadNewsData();
           loaded = true;
         }
     }
