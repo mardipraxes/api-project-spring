@@ -1,5 +1,9 @@
 server:
   port: ${SERVER_PORT:8081}
+system:
+  properties:
+    java:
+      version: ${JAVA_VERSION:17}
 springdoc:
   swagger-ui:
     enabled: true

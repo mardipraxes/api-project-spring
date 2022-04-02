@@ -15,7 +15,7 @@ public class NewsFindDto {
     private String title;
     private String description;
     private String author;
-    private Date publishedAt;
+    private Date published_at;
     private String url;
     private String image;
     private String source;
