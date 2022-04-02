@@ -8,6 +8,7 @@ import mindswap.academy.app.persistance.repository.CategoryRepo;
 import mindswap.academy.app.persistance.repository.RatingRepo;
 import mindswap.academy.app.persistance.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -67,7 +68,13 @@ public class NewsConverter {
         Arrays.stream(newsPostDto.getCategories())
                 .forEach(category -> newsPost.getCategories().add(categoryRepo.findByName(category)));
 
+        if(newsPostDto.getAuthor() == null || newsPostDto.getAuthor().isEmpty()){
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            newsPost.setJournalist((Journalist) userRepo.findByUsername(username));
+        }
+
         newsPost.setJournalist((Journalist) userRepo.findByUsername(newsPostDto.getAuthor()));
+
 
         Rating rating = Rating.builder()
                 .biasedRating(0)
