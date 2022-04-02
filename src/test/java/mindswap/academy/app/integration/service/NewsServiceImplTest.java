@@ -1,4 +1,4 @@
-package mindswap.academy.app.service;
+package mindswap.academy.app.integration.service;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.any;
@@ -26,6 +26,7 @@ import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.NewsPost;
 import mindswap.academy.app.persistance.model.Rating;
 import mindswap.academy.app.persistance.repository.NewsRepo;
+import mindswap.academy.app.service.NewsServiceImpl;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

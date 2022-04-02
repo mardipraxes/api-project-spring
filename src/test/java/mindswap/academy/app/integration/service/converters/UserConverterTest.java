@@ -1,4 +1,4 @@
-package mindswap.academy.app.converters;
+package mindswap.academy.app.integration.service.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -15,6 +15,7 @@ import java.util.HashSet;
 import mindswap.academy.app.commands.RegistrationDto;
 
 import mindswap.academy.app.commands.UserDto;
+import mindswap.academy.app.converters.UserConverter;
 import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.model.User;

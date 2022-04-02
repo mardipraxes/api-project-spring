@@ -1,4 +1,4 @@
-package mindswap.academy.app.service;
+package mindswap.academy.app.integration.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
@@ -24,6 +24,7 @@ import mindswap.academy.app.persistance.model.Journalist;
 import mindswap.academy.app.persistance.model.Role;
 import mindswap.academy.app.persistance.model.User;
 import mindswap.academy.app.persistance.repository.UserRepo;
+import mindswap.academy.app.service.UserServiceImpl;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
