@@ -1,6 +1,5 @@
 # NEWS-API-PROJECT
 
----link hirokumata---
 
 ### Description
 This project is a final group exercise as part of Mindera's Mindswap Academy back-end course.
