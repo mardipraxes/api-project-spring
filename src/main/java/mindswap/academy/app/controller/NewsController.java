@@ -63,7 +63,7 @@ public class NewsController {
      * @param categories - categories of the news posts
      * @return a response entity with the list of news posts
      */
-    @GetMapping("/find")
+    @GetMapping("/search-all")
     private ResponseEntity<?> getNews(@RequestParam(value = "categories", defaultValue = "[]") String[] categories) {
 
         List<NewsPostDto> foundNews = newsService.findAllNewsByCategory(categories);
