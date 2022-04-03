@@ -1,10 +1,1 @@
 
-${AnsiColor.RED}        __  __    ______    __     __     _   __    ______ _       __   _____           ___     ____     ____
- ${AnsiColor.RED}      / / / /   / ____/   / /    / /    / | / /   / ____/| |     / /  / ___/          /   |   / __ \   /  _/
-  ${AnsiColor.RED}    / /_/ /   / __/     / /    / /    /  |/ /   / __/   | | /| / /   \__ \          / /| |  / /_/ /   / /
-${AnsiColor.RED}     / __  /   / /___    / /___ / /___ / /|  /   / /___   | |/ |/ /   ___/ /         / ___ | / ____/  _/ /
-  ${AnsiColor.RED}  /_/ /_/   /_____/   /_____//_____//_/ |_/   /_____/   |__/|__/   /____/         /_/  |_|/_/      /___/
-
-${AnsiColor.DEFAULT}
-${application.title} ${application.version}
-Powered by Spring Boot ${spring-boot.version}
