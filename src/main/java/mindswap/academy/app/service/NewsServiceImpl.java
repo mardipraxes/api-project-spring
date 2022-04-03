@@ -132,7 +132,8 @@ public class NewsServiceImpl implements NewsService {
     }
 
     public List<NewsPostDto> findAllNewsByCategory(String[] categories) {
-        if(categories == null) {
+
+        if(categories == null || categories[0].equals("[]")) {
             log.warn("No categories provided");
             throw new InvalidQueryException();
         }
