@@ -69,7 +69,7 @@ public class NewsServiceImpl implements NewsService {
                 .forEach(category -> newsPosts.addAll(category.getNewsPost()));
 
         List<NewsPost> newsPostsFilteredByAuthor = new ArrayList<>();
-        if (!author[0].equals("[]")) {
+        if (author != null && !author[0].equals("[]")) {
             newsPosts.stream()
                     .filter(newsPost ->
                             Arrays.stream(author)
@@ -101,7 +101,7 @@ public class NewsServiceImpl implements NewsService {
     }
 
     private boolean verifyValidQuery(String[] categories) {
-        return categories != null && categories.length > 0;
+        return categories != null && categories.length > 0 ;
     }
 
     public void rateNews(String title, RatingDto ratingDto) {
