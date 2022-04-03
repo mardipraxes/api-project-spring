@@ -1,5 +1,8 @@
 # NEWS-API-PROJECT
 
+<div align="center">
+<img src="https://user-images.githubusercontent.com/97889790/161441227-e95904d6-a6bc-435c-9d38-6ecb93155d53.png" width="1000px" />
+</div>
 
 ### Description
 This project is a final group exercise as part of Mindera's Mindswap Academy back-end course.
