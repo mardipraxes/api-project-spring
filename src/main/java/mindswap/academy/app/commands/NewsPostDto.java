@@ -18,7 +18,6 @@ public class NewsPostDto {
     private String title;
     @NotBlank
     private String content;
-    @NotBlank
     private String author;
     @NotNull
     private String[] categories;

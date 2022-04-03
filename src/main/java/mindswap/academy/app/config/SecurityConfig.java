@@ -77,7 +77,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll();
 
         http.authorizeRequests()
-                .antMatchers("/api/users","/api/findnews**","/api/news/delete**")
+                .antMatchers("/api/users","/api/findnews**","/api/news/delete/**")
                 .hasRole("Admin");
 
         http.authorizeRequests()
