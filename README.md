@@ -22,22 +22,23 @@ on the basis of their written quality, bias or lack thereof and "truthfulness", 
 
 
 ## Table of Contents
-1.[Software used] (#software-used)
-* [Dependencies] (#dependencies)
+1. [Software used](#software-used)
+ * [Dependencies](#dependencies)
 
-2.[HTTP requests] (#http-requests)
-* [Homepage] (#homepage)
-* [Users] (#users)
-    * [Registration] (#registration)
-    * [Others] (#others)
-* [News] (#news)
-    * [Post] (#post)
-    * [Rate] (#rate)
-    * [Edit] (#edit)
-    * [Search] (#search)
+2.[HTTP requests](#http-requests)
+
+* [Homepage](#homepage)
+* [Users](#users)
+    * [Registration](#registration)
+    * [Others](#others)
+* [News](#news)
+    * [Post](#post)
+    * [Rate](#rate)
+    * [Edit](#edit)
+    * [Search](#search)
 
 
-## Software Used
+##Software used
 * IntelliJ IDEA Community Edition 2021.3.3
 * MySQL Workbench 8.0.28
 * Git 2.25.1
@@ -56,11 +57,11 @@ You can also find more information in the [HELP.md](https://github.com/mardiprax
 List of currently possible HTTP requests followed by examples.
 
 
-###_Homepage_
+###Homepage
 http://localhost:8081/api/homepage
 
-###_Users_
-####1.Registration
+###Users
+####Registration
 
 **User registration:** http://localhost:8081/api/register
 
@@ -77,7 +78,7 @@ http://localhost:8081/api/homepage
 **Ask to be validated as a journalist:** http://localhost:8081/api/apply-journalist
 
 
-####2.Others
+####Others
 
 **Get all users:** http://localhost:8081/api/users
 (admin only)
@@ -90,24 +91,24 @@ http://localhost:8081/api/homepage
 **Refresh authentication token:** http://localhost:8081/api/news/refresh-token
 
 
-###_News_
+###News
 
-####1.Post
+####Post
 http://localhost:8081/api/news/post
 (must be validated as journalists)
 
-####2.Rate
+####Rate
 http://localhost:8081/api/news/rate/russia-nukes-portugal-again-wtf
 (news article retrieved from Fallout Wiki)
 
-####3.Edit
+####Edit
 **Edit news:** http://localhost:8081/api/news/edit
 (news article must be owned by user in session. Choice of article is made at front-end through body)
 
 **Delete a news article by ID:** http://localhost:8081/api/news/delete/5
 (admin only)
 
-####4.Search
+####Search
 **Load news to database from mediastack API:** http://localhost:8081/api/getnewsfromapi?categories=sports
 
 **Search news posted by users:** http://localhost:8081/api/news/search?categories=sports
