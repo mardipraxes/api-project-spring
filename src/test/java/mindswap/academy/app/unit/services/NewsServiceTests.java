@@ -56,7 +56,6 @@ public class NewsServiceTests {
     }
 
     @Test
-    @Disabled
     public void testSearchNews() {
         //Given
 
@@ -65,9 +64,7 @@ public class NewsServiceTests {
 
         Category category = MockData.getMockCategory();
         category.setNewsPost(List.of(MockData.getMockNewsPost()));
-
-        when(newsRepo.findByCategories(any())).thenReturn(List.of(MockData.getMockNewsPost()));
-        when(categoryRepo.findByName(any())).thenReturn((Category) List.of(category));
+        when(categoryRepo.findByName(any())).thenReturn(category);
 
 
         //When
@@ -85,6 +82,7 @@ public class NewsServiceTests {
         String[] categories = null;
         String[] authors = null;
 
+
         //When
         //Then
         assertThrows(InvalidQueryException.class, () -> newsServiceTest.findNews(categories, authors));
@@ -92,14 +90,16 @@ public class NewsServiceTests {
     }
 
     @Test
-    @Disabled
     public void testSearchNewsButNoAuthorsMatchCategories() {
         //Given
 
         String[] categories = {"test"};
         String[] authors = {"test23"};
+        Category category = MockData.getMockCategory();
+        category.setNewsPost(List.of(MockData.getMockNewsPost()));
 
-        when(newsRepo.findByCategories(any())).thenReturn(List.of(MockData.getMockNewsPost()));
+//        when(newsRepo.findByCategories(any())).thenReturn(List.of(MockData.getMockNewsPost()));
+        when(categoryRepo.findByName(any())).thenReturn(category);
 
         //When
         //Then
@@ -108,14 +108,17 @@ public class NewsServiceTests {
     }
 
     @Test
-    @Disabled
-    public void testSearchNewsButAuthorsIsNull() {
+    public void testSearchNewsButAuthorsIsEmpty() {
         //Given
 
         String[] categories = {"test"};
-        String[] authors = null;
+        String[] authors = {"[]"};
 
-        when(newsRepo.findByCategories(any())).thenReturn(List.of(MockData.getMockNewsPost()));
+        Category category = MockData.getMockCategory();
+        category.setNewsPost(List.of(MockData.getMockNewsPost()));
+
+//        when(newsRepo.findByCategories(any())).thenReturn(List.of(MockData.getMockNewsPost()));
+        when(categoryRepo.findByName(any())).thenReturn(category);
 
         //When
         List<NewsPostDto> newsPostDtoList = newsServiceTest.findNews(categories, authors);
@@ -180,11 +183,4 @@ public class NewsServiceTests {
 
 
     }
-
-
-
-
-
-
-
 }

@@ -4,6 +4,13 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
+/**
+ *
+ * This class is meant to make a hash for journalist tokens
+ * Current implementation is not secure, but it is enough for the current purpose
+ *
+ */
+
 @Component
 public class MHasher {
 

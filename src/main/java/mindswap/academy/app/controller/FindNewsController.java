@@ -22,7 +22,7 @@ public class FindNewsController {
 
     private final FindNewsLookupServiceImpl findNewsLookupServiceImpl;
 
-    @GetMapping("/findnews")
+    @GetMapping("/get-news-from-api/")
     public ResponseEntity<List<NewsFindDto>> getFindNewsByParameters(
             @RequestParam(value = "languages", defaultValue = "en") String languages,
             @RequestParam(value = "categories", defaultValue = "sports") String categories,

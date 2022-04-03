@@ -17,12 +17,12 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MariaDB103Dialect
     hibernate:
-      ddl-auto: ${HIBERNATE_DDL_AUTO:update}
+      ddl-auto: ${HIBERNATE_DDL_AUTO:create-drop}
       show-sql: true
   datasource:
-    url: ${MARIADB_URL:jdbc:mariadb://localhost:3306/news-api}
-    username: ${MARIADB_USER:root}
-    password: ${MARIADB_PASSWORD:mypass}
-#    url: ${MARIADB_URL:jdbc:mariadb://ms-2nd-edition-groups-db00006104.mdb0002418.db.skysql.net:5003/group2?useSSL=true&trustServerCertificate=true}
-#    username: ${MARIADB_USERNAME:group2}
-#    password: ${MARIADB_PASSWORD:Group2Password!}
+#    url: ${MARIADB_URL:jdbc:mariadb://localhost:3306/news-api}
+#    username: ${MARIADB_USER:root}
+#    password: ${MARIADB_PASSWORD:mypass}
+    url: ${MARIADB_URL:jdbc:mariadb://ms-2nd-edition-groups-db00006104.mdb0002418.db.skysql.net:5003/group2?useSSL=true&trustServerCertificate=true}
+    username: ${MARIADB_USERNAME:group2}
+    password: ${MARIADB_PASSWORD:Group2Password!}
