@@ -40,11 +40,19 @@ public class NewsServiceImpl implements NewsService {
 
     public void postNews(NewsPostDto newsPostDto) {
 
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        if(userRepo.findByUsername(username) == null || !(userRepo.findByUsername(username) instanceof Journalist)){
+            log.warn("User not found");
+            log.info("User is using a fake account");
+            throw new UserNotFoundException(username);
+        }
+
         if (newsRepo.findByTitle(newsPostDto.getTitle()).isPresent()) {
             log.warn("News post already exists");
             throw new NewsPostAlreadyExistsException(newsPostDto.getTitle());
         }
         newsRepo.save(newsConverter.toEntity(newsPostDto));
+
     }
 
     @Override

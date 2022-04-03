@@ -71,9 +71,11 @@ public class NewsConverter {
         if(newsPostDto.getAuthor() == null || newsPostDto.getAuthor().isEmpty()){
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             newsPost.setJournalist((Journalist) userRepo.findByUsername(username));
+        } else {
+            newsPost.setJournalist((Journalist) userRepo.findByUsername(newsPostDto.getAuthor()));
         }
 
-        newsPost.setJournalist((Journalist) userRepo.findByUsername(newsPostDto.getAuthor()));
+
 
 
         Rating rating = Rating.builder()
